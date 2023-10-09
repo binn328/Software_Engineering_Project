@@ -1,5 +1,13 @@
 <script>
+  // 토스트 메시지 컨테이너 배치
+  import { SvelteToast, toast } from '@zerodevx/svelte-toast'
+
+  // 토스트 메시지 옵션
+  const options = {
+    duration: 10000
+  }
   export let data;
+
 </script>
 
 <div class="container">
@@ -11,7 +19,7 @@
       {#if data?.profile}
       <li>
         <form action="/logout" method="post">
-            <button>로그아웃</button>
+            <button on:click={() => toast.push("로그아웃했습니다.")}>로그아웃</button>
         </form>
       </li>
       {:else}
@@ -23,3 +31,4 @@
   <slot />
 </div>
 
+<SvelteToast {options} />
