@@ -18,13 +18,13 @@
     <ul>
       {#if data?.profile}
       <li>
-        <form action="/logout" method="post">
-            <button on:click={() => toast.push("로그아웃했습니다.")}>로그아웃</button>
+        <form action="/auth/logout" method="post">
+            <button>로그아웃</button>
         </form>
       </li>
       {:else}
-      <li><a href="/login">로그인</a></li>
-      <li><a href="/register">회원가입</a></li>
+      <li><a href="/auth/login">로그인</a></li>
+      <li><a href="/auth/register">회원가입</a></li>
       {/if}
     </ul>
   </nav>
