@@ -1,5 +1,13 @@
 <script>
+  // 토스트 메시지 컨테이너 배치
+  import { SvelteToast, toast } from '@zerodevx/svelte-toast'
+
+  // 토스트 메시지 옵션
+  const options = {
+    duration: 10000
+  }
   export let data;
+
 </script>
 
 <div class="container">
@@ -23,3 +31,4 @@
   <slot />
 </div>
 
+<SvelteToast {options} />

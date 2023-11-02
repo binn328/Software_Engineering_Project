@@ -1,5 +1,8 @@
 <script>
     export let form;
+    let toast_fail = () => {
+        
+    }
 </script>
 
 <article>
