@@ -1,6 +1,6 @@
 <script>
 	// @ts-nocheck
-
+	export let data;
 	import NavBar from '$lib/component/navBar.svelte';
 </script>
 
