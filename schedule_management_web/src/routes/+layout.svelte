@@ -8,8 +8,8 @@
   }
   export let data;
  
-  //여기부터 추가함
   let isMenuOpen = false;
+  let isCalendarOpen=false;
 
 
   function openMenu(){
@@ -19,9 +19,13 @@
   function closeMenu() {
     isMenuOpen = false;
   }
+
+  function openCalendar(){
+    isCalendar=true;
+    isMenuOpen =false; //close the menu whenthe calendar is opend
+  }
  
 
-//여까지
 </script>
 
 <div class="container">
@@ -52,17 +56,22 @@
 
 
 {#if isMenuOpen}
-  <div class="menu-bar show" on:click={closeMenu}>
+ <div class="menu-bar show" on:click={closeMenu}>
     <!-- 메뉴 목록 -->
     <a href="/auth/profile" class="menu-item">개인정보</a>
-    <a href="#" class="menu-item">스케쥴</a>
-    <a href="/calendar/edit" class="menu-item">캘린더</a>
-    <a href="#" class="menu-item">학점</a>
-    <a href="#" class="menu-item">해야할 일</a>
-    <a href="#" class="menu-item">시간표</a>
+    <a href="/schedule  " class="menu-item">스케쥴</a>
+    <a href="/calendar" class="menu-item"
+    on:click ={()=> openCalendar()}>캘린더</a>
+    <a href="/grade" class="menu-item">학점</a>
+    <a href="/todo" class="menu-item">해야할 일</a>
+    <a href="/timetable" class="menu-item">시간표</a>
   </div>
 {/if}
 
+
+{#if isCalendarOpen}
+<a href="/calendar"class="menu-item">캘린더</a>
+{/if}
 
 <style>
 
