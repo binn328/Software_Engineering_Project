@@ -1,4 +1,5 @@
 <script>
+<<<<<<<<< Temporary merge branch 1
   // 토스트 메시지 컨테이너 배치
   import { SvelteToast, toast } from '@zerodevx/svelte-toast'
 
@@ -7,7 +8,21 @@
     duration: 10000
   }
   export let data;
+ 
+  //여기부터 추가함
+  let isMenuOpen = false;
 
+
+  function openMenu(){
+    isMenuOpen=true;
+  }
+
+  function closeMenu() {
+    isMenuOpen = false;
+  }
+ 
+
+//여까지
 </script>
 
 <div class="container">
