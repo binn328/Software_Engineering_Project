@@ -1,6 +1,6 @@
 <script>
 	export let form;
-    export let form;
+
     let toast_fail = () => {
         
     }

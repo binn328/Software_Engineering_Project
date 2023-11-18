@@ -9,7 +9,6 @@
   const options = {
     duration: 10000
   }
-  export let data;
  
   let isMenuOpen = false;
   let isCalendarOpen=false;
