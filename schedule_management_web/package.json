@@ -19,7 +19,7 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
-		"@zerodevx/svelte-toast": "^0.9.5",
+		"@zerodevx/svelte-toast": "github:zerodevx/svelte-toast",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte": "^2.30.0",
