@@ -7,7 +7,7 @@
 <body>
 	<main class="container">
 		<div>
-			<NavBar />
+			<NavBar data={data} />
 		</div>
 		<div>
 			<slot />
