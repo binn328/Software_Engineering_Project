@@ -11,7 +11,6 @@
 	</ul>
 	<!--네비게이션-->
 	<ul>
-		<li><a href="/">Home</a></li>
 		<li><a href="/schedule">Schedule</a></li>
 		<li><a href="/calendar">Calendar</a></li>
 		<li><a href="/grade">Grade</a></li>
