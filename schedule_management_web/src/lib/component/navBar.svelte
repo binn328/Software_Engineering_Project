@@ -7,7 +7,7 @@
 <nav>
 	<!--타이틀-->
 	<ul>
-		<li><strong>Schedule Manager</strong></li>
+		<li><a href="/">Schedule Management</a></li>
 	</ul>
 	<!--네비게이션-->
 	<ul>
