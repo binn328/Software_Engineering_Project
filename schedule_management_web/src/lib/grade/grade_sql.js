@@ -10,3 +10,14 @@ export async function findRecordByOwner(locals) {
 	});
 	return records;
 }
+
+/**
+ *
+ * @param {App.Locals} locals
+ * @param {Object} data
+ */
+export async function insertRecord(locals, data) {
+	const record = await locals.pb.collection('Grade').create(data);
+
+	return record;
+}
