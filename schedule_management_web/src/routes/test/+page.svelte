@@ -10,7 +10,9 @@
 	<br />
 	<hr />
 	<h3>gradeList의 첫번째 요소</h3>
-	{JSON.stringify(gradeList[0])}
+	<p>id : {gradeList[0].id}</p>
+	<p>subject : {gradeList[0].subject}</p>
+	<p>year : {gradeList[0].year}</p>
 </div>
 <hr />
 <!-- grade 삽입 테스트 -->
