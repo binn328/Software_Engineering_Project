@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { findRecordByOwner } from '$lib/grade/grade_sql';
+import { findRecordByOwner, insertRecord } from '$lib/grade/grade_sql';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
@@ -15,3 +15,11 @@ export async function load({ locals }) {
 		gradeList: gradeList
 	};
 }
+
+export const actions = {
+	addGrade: async ({ locals, request }) => {
+		const result = insertRecord(locals, await request.formData());
+
+		return result;
+	}
+};

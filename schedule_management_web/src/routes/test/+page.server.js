@@ -11,17 +11,7 @@ export async function load({ locals }) {
 
 export const actions = {
 	addGrade: async ({ locals, request }) => {
-		const formData = await request.formData();
-		const data = {
-			owner: locals.pb.authStore.model?.id,
-			credit: formData.get('credit'),
-			is_major: formData.get('is_major'),
-			subject: formData.get('subject'),
-			grade: formData.get('grade'),
-			semester: formData.get('semester'),
-			year: formData.get('year')
-		};
-		const result = insertRecord(locals, data);
+		const result = insertRecord(locals, await request.formData());
 
 		return result;
 	}

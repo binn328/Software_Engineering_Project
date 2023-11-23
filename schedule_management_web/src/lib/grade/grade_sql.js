@@ -14,9 +14,18 @@ export async function findRecordByOwner(locals) {
 /**
  *
  * @param {App.Locals} locals
- * @param {Object} data
+ * @param {*} formData
  */
-export async function insertRecord(locals, data) {
+export async function insertRecord(locals, formData) {
+	const data = {
+		owner: locals.pb.authStore.model?.id,
+		credit: formData.get('credit'),
+		is_major: formData.get('is_major'),
+		subject: formData.get('subject'),
+		grade: formData.get('grade'),
+		semester: formData.get('semester'),
+		year: formData.get('year')
+	};
 	const record = await locals.pb.collection('Grade').create(data);
 
 	return record;
