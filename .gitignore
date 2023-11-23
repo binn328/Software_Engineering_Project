@@ -1,7 +1,9 @@
+schedule_management_web\DB\pb_data\*
+schedule_management_web/DB/pb_data/data.db
+schedule_management_web/DB/pb_data/data.db-shm
+schedule_management_web/DB/pb_data/data.db-wal
 schedule_management_web/DB/pb_data/logs.db
 schedule_management_web/DB/pb_data/logs.db-shm
 schedule_management_web/DB/pb_data/logs.db-wal
-schedule_management_web/DB/pb_data/data.db-wal
-schedule_management_web/DB/pb_data/data.db-shm
 schedule_management_web/DB/pb_data/data.db
 schedule_management_web/DB/pb_data/logs.db

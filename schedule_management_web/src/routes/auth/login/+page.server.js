@@ -19,7 +19,11 @@ export const actions = {
 		try {
 			//DB에 있는것과 비교
 			//@ts-ignore
-			await locals.pb.collection('users').authWithPassword(data.email, data.password);
+			await locals.pb.collection('users').authWithPassword(data.email, data.password),
+				{},
+				{
+					id: 'id'
+				};
 		} catch (error) {
 			// 로그인에 문제가 있으면 422 에러를 반환한다.
 			// 그 결과, 페이지에 해당 에러메시지가 표시된다.
