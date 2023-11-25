@@ -30,3 +30,34 @@ export async function insertRecord(locals, formData) {
 
 	return record;
 }
+
+/**
+ * @param {App.Locals} locals
+ * @param {*} formData
+ */
+export async function updateRecord(locals, formData) {
+	const data = {
+		owner: locals.pb.authStore.model?.id,
+		credit: formData.get('credit'),
+		is_major: formData.get('is_major'),
+		subject: formData.get('subject'),
+		grade: formData.get('grade'),
+		semester: formData.get('semester'),
+		year: formData.get('year')
+	};
+
+	const record = await locals.pb.collection('Grade').update(formData.get('id'), data);
+
+	return record;
+}
+/**
+ *
+ * @param {App.Locals} locals
+ * @param {*} formData
+ * @returns
+ */
+export async function deleteRecord(locals, formData) {
+	const result = await locals.pb.collection('Grade').delete(formData.get('id'));
+
+	return result;
+}

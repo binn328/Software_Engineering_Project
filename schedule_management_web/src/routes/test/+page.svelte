@@ -49,3 +49,49 @@
 		<button type="submit">추가하기</button>
 	</form>
 </div>
+<!-- grade 수정 테스트 -->
+<div>
+	<h3>grade 수정 테스트</h3>
+	<form method="post" action="?/updateGrade">
+		<label
+			>credit
+			<input name="credit" type="number" required min="0" max="3" value={gradeList[0]?.credit} />
+		</label>
+		<label
+			>is_major
+			<select name="is_major" required value={gradeList[0].is_major}>
+				<option value="true">전공</option>
+				<option value="false">교양</option>
+			</select>
+		</label>
+		<label
+			>subject
+			<input name="subject" type="text" required value={gradeList[0].subject} />
+		</label>
+		<label
+			>grade
+			<input
+				name="grade"
+				type="number"
+				step="0.1"
+				min="0.0"
+				max="4.5"
+				value={gradeList[0].grade}
+				required
+			/>
+		</label>
+		<label
+			>semester
+			<input name="semester" type="number" min="1" max="2" value={gradeList[0].semester} required />
+		</label>
+		<label
+			>year
+			<input name="year" type="number" required min="2000" value={gradeList[0].year} />
+		</label>
+		<label>
+			<input name="id" type="text" required value={gradeList[0].id} hidden />
+		</label>
+		<button type="submit">수정하기</button>
+		<button type="submit" formaction="?/deleteGrade">삭제하기</button>
+	</form>
+</div>
