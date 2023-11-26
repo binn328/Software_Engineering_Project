@@ -23,11 +23,11 @@
 	<form method="post" action="?/addTimeTable">
 		<label
 			>start_time
-			<input name="start_time" type="time" />
+			<input name="start_time" type="date" />
 		</label>
 		<label
 			>end_time
-			<input name="end_time" type="time" />
+			<input name="end_time" type="date" />
 		</label>
 		<label
 			>memo
@@ -42,11 +42,11 @@
 	<form method="post" action="?/updateTimeTable">
 		<label
 			>start_time
-			<input name="start_time" type="time" />
+			<input name="start_time" type="datetime" />
 		</label>
 		<label
 			>end_time
-			<input name="end_time" type="time" />
+			<input name="end_time" type="datetime" />
 		</label>
 		<label
 			>memo
@@ -61,8 +61,8 @@
 	<h3>timetable 삭제 테스트</h3>
 	<form method="post" action="?/deleteTimeTable">
 		<p>{TimeTableList[0].memo}</p>
-        <p>{TimeTableList[0].start_time}</p>
-        <p>{TimeTableList[0].end_time}</p>
+		<p>{TimeTableList[0].start_time}</p>
+		<p>{TimeTableList[0].end_time}</p>
 		<input id="id" name="id" type="hidden" value={TimeTableList[0].id} />
 		<label for="delete">정말 지우겠습니까?</label>
 		<button id="delete" name="delete" type="submit">삭제하기</button>
