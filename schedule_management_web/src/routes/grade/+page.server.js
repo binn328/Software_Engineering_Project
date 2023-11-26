@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { findRecordByOwner, insertRecord } from '$lib/grade/grade_sql';
+import { deleteRecord, findRecordByOwner, insertRecord, updateRecord } from '$lib/grade/grade_sql';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
@@ -18,8 +18,27 @@ export async function load({ locals }) {
 
 export const actions = {
 	addGrade: async ({ locals, request }) => {
-		const result = insertRecord(locals, await request.formData());
+		const result = await insertRecord(locals, await request.formData());
 
 		return result;
+	},
+	updateGrade: async ({ locals, request }) => {
+		const result = await updateRecord(locals, await request.formData());
+
+		console.log(result);
+		return result;
+	},
+	deleteGrade: async ({ locals, request }) => {
+		const result = await deleteRecord(locals, await request.formData());
+
+		if (result) {
+			return {
+				code: 204
+			};
+		} else {
+			return {
+				code: 400
+			};
+		}
 	}
 };
