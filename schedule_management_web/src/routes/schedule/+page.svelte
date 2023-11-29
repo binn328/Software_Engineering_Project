@@ -15,7 +15,7 @@
 		showAddSchedule = false;
 	}
 
-	/**
+	/** 중요도를 보고 배경 색을 반환한다.
 	 * @param {number} importance_level
 	 */
 	function getBgColor(importance_level) {
@@ -33,21 +33,20 @@
 
 <div class="container">
 	{#each scheduleList as schedule}
-		<div class="schedule-item" style="background-color: {getBgColor(schedule.importance_level)};">
-			<div class="date-day" style="color:white;">{schedule.start_date}</div>
-			<div class="event-container">
-				<div class="event" style="background-color: rgba(255, 255, 255, 0.8);">
-					{schedule.schedule_name}
-				</div>
-				<div class="buttons">
-					<div class="button pink" on:click={() => deleteSchedule(id)}>Delete</div>
-					<div class="button blue" on:click={() => modifySchedule(id)}>Modify</div>
-					<div class="button yellow" on:click={() => repeatSchedule(id)}>Repeat</div>
-					<div class="button pink" on:click={() => shareSchedule(id)}>Share</div>
+		<form method="post" action="?/updateSchedule">
+			<div class="schedule-item" style="background-color: {getBgColor(schedule.importance_level)};">
+				<div class="date-day" style="color:black;">{schedule.start_date}</div>
+				<div class="event-container">
+					<div class="event" style="background-color: rgba(255, 255, 255, 0.8);">
+						{schedule.schedule_name}
+						<input name="id" type="text" value={schedule.id} hidden />
+					</div>
+					<div class="buttons">
+						<button class="button pink" type="submit" formaction="?/deleteSchedule">Delete</button>
+					</div>
 				</div>
 			</div>
-			{getBgColor(schedule.importance_level)}
-		</div>
+		</form>
 	{/each}
 	{#if showAddSchedule}
 		<Component_addSchedule on:close={closeAddSchedule} />
