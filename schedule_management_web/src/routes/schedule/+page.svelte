@@ -1,11 +1,14 @@
 <script>
   // @ts-nocheck
+ 
 
 import { onMount } from 'svelte';
   import { tasks} from '$lib/component/store';
   import AddSchedule from '$lib/component/AddSchedule.svelte';
   import RepeatSchedule from '$lib/component/RepeatSchedule.svelte';
   import ShareSchedule from '$lib/component/ShareSchedule.svelte';
+
+  
 
   let schedules = [];
   let showAddSchedule = false;

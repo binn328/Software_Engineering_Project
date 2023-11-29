@@ -5,16 +5,18 @@
         showModal = true;
     }
 
-    function closeModal() {
-        showModal = false;
+    function goProfile(){
+        window.location.href ='/auth/profile';
     }
+
+   
 </script>
 
 <article>
     <h1>회원탈퇴 하시겠습니까?</h1>
     <div class="btn">
         <button type="button" on:click={openModal}>예</button>
-        <a role="button" href="/auth/withdrawal">아니오</a>
+        <button type="button" on:click={goProfile}>아니오</button>
     </div>
 </article>
 
@@ -49,27 +51,16 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
-
-   /* .btn {
-        display: flex;
-        gap: 10px;
-        justify-content:right;
-        
+    h1{
+        text-align:center;
     }
 
-    .btn button {
-        
-        width: 15%;
-        
-        
-    }
-    .btn a{
-        width:15%;
-    }*/
     .btn {
         display: flex;
         gap: 10px;
         justify-content: center;
+       margin : 0 auto;
+        width:25%;
     }
 
 </style>

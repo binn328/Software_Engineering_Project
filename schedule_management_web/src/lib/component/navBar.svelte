@@ -27,6 +27,7 @@
 						>{data.profile?.name}</summary
 					>
 					<ul role="listbox">
+						<li><a href='/auth/profile'>profile</a></li>
 						<li><a href="/auth/logout">logout</a></li>
 					</ul>
 				</details>
