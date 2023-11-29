@@ -10,7 +10,7 @@ const pb = new PocketBase('http://127.0.0.1:8090');
  */
 export async function findRecordByOwner(locals) {
 	const records = await locals.pb.collection('Goal').getFullList({
-		// 현재 로그인된 유저가 생성한 schedule 레코드들만 가져온다.
+		// 현재 로그인된 유저가 생성한 goal 레코드들만 가져온다.
 		filter: `owner = "${locals.pb.authStore.model?.id}"`
 	});
 	return records;
