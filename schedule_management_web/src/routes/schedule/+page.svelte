@@ -1,167 +1,62 @@
 <script>
-	// @ts-nocheck
-
-	import { onMount } from 'svelte';
-	import { tasks } from '$lib/component/store';
-	import AddSchedule from '$lib/component/AddSchedule.svelte';
-	import RepeatSchedule from '$lib/component/RepeatSchedule.svelte';
-	import ShareSchedule from '$lib/component/ShareSchedule.svelte';
-
+	import Component_addSchedule from '$lib/component/addSchedule_ver2.svelte';
 	export let data;
+	// db에서 가져온 스케줄 목록
+	const scheduleList = data.scheduleList;
 
-	let schedules = [];
+	/* 페이지 동작에 필요한 변수들 */
 	let showAddSchedule = false;
-	let editModeData = null;
 
-	let showRepeatSchedule = false;
-	let repeatScheduleData = null;
-
-	let showShareSchedule = false;
-	let sharedFriends = [];
-
-	function deleteSchedule(id) {
-		const isConfirmed = confirm('정말로 삭제하시겠습니까?');
-
-		if (isConfirmed) {
-			schedules = schedules.filter((schedule) => schedule.id !== id);
-
-			console.log('After update:', $tasks);
-			tasks.update((currentTasks) => currentTasks.filter((task) => task.scheduleId !== id));
-
-			updateLocalStorage();
-		}
-	}
-
-	function modifySchedule(id) {
-		const scheduleToModify = schedules.find((schedule) => schedule.id === id);
-
-		showAddSchedule = true;
-		editModeData = { ...scheduleToModify };
-	}
-
-	function repeatSchedule(id) {
-		showRepeatSchedule = true;
-	}
-
-	function saveRepeatSchedule(event) {
-		repeatScheduleData = event.detail;
-	}
-
-	function shareSchedule(id) {
-		showShareSchedule = true;
-	}
-
-	function handleSharedFriends(names) {
-		sharedFriends = names;
-		showShareSchedule = false;
-	}
-
-	function closeShareSchedule() {
-		showShareSchedule = false;
-	}
-
+	/* 페이지 동작에 필요한 함수들 */
 	function addSchedule() {
 		showAddSchedule = true;
 	}
-
 	function closeAddSchedule() {
 		showAddSchedule = false;
 	}
 
-	function saveSchedule(event) {
-		if (new Date(event.detail.startDate) > new Date(event.detail.endDate)) {
-			alert('시작일은 마감일보다 늦을 수 없습니다.');
+	/**
+	 * @param {number} importance_level
+	 */
+	function getBgColor(importance_level) {
+		if (importance_level == 1) {
+			return 'pink';
+		} else if (importance_level == 2) {
+			return 'yellow';
+		} else if (importance_level == 3) {
+			return 'green';
 		} else {
-			if (editModeData) {
-				schedules = schedules.map((schedule) =>
-					schedule.id === editModeData.id ? { ...event.detail } : schedule
-				);
-
-				// Update the tasks store to reflect the modification in edit mode
-				const updatedTasks = tasks.update((currentTasks) =>
-					currentTasks.map((task) =>
-						task.scheduleId === editModeData.id
-							? { ...task, task: event.detail.content, scheduleId: event.detail.id }
-							: task
-					)
-				);
-
-				console.log('updated Tasks:', updatedTasks);
-
-				editModeData = null;
-			} else {
-				const newTask = {
-					id: Math.floor(Math.random() * 1000),
-					task: event.detail.content,
-					completed: false,
-					editable: true,
-					scheduleId: event.detail.id
-				};
-
-				// Update the tasks store for a new schedule
-				tasks.update((currentTasks) => [...currentTasks, newTask]);
-
-				schedules = [...schedules, event.detail];
-			}
-
-			updateLocalStorage();
-
-			showAddSchedule = false;
+			return 'gray';
 		}
 	}
-
-	function updateLocalStorage() {
-		localStorage.setItem('schedules', JSON.stringify(schedules));
-	}
-
-	// Load schedules from localStorage on component mount
-	onMount(() => {
-		const storedSchedules = localStorage.getItem('schedules');
-		if (storedSchedules) {
-			schedules = JSON.parse(storedSchedules);
-		}
-	});
 </script>
 
 <div class="container">
+	{#each scheduleList as schedule}
+		<div class="schedule-item" style="background-color: {getBgColor(schedule.importance_level)};">
+			<div class="date-day" style="color:white;">{schedule.start_date}</div>
+			<div class="event-container">
+				<div class="event" style="background-color: rgba(255, 255, 255, 0.8);">
+					{schedule.schedule_name}
+				</div>
+				<div class="buttons">
+					<div class="button pink" on:click={() => deleteSchedule(id)}>Delete</div>
+					<div class="button blue" on:click={() => modifySchedule(id)}>Modify</div>
+					<div class="button yellow" on:click={() => repeatSchedule(id)}>Repeat</div>
+					<div class="button pink" on:click={() => shareSchedule(id)}>Share</div>
+				</div>
+			</div>
+			{getBgColor(schedule.importance_level)}
+		</div>
+	{/each}
+	{#if showAddSchedule}
+		<Component_addSchedule on:close={closeAddSchedule} />
+	{/if}
+
 	<div class="add-schedule" on:click={addSchedule}>
 		<div class="add-schedule-btn">+</div>
 		<div>Schedule 추가하기</div>
 	</div>
-
-	<div class="schedule">
-		{#each schedules as { id, year, date, day, content, bgColor }, index (id)}
-			{#if index === 0 || year !== schedules[index - 1].year}
-				<div class="year">{year}</div>
-			{/if}
-			<div class="schedule-item" key={id} style="background-color: {bgColor};">
-				<div class="date-day" style="color:white;">{date} ({day})</div>
-				<div class="event-container">
-					<div class="event" style="background-color: rgba(255, 255, 255, 0.8);">{content}</div>
-					<div class="buttons">
-						<div class="button pink" on:click={() => deleteSchedule(id)}>Delete</div>
-						<div class="button blue" on:click={() => modifySchedule(id)}>Modify</div>
-						<div class="button yellow" on:click={() => repeatSchedule(id)}>Repeat</div>
-						<div class="button pink" on:click={() => shareSchedule(id)}>Share</div>
-					</div>
-				</div>
-			</div>
-		{/each}
-	</div>
-	{#if showAddSchedule}
-		<AddSchedule on:close={closeAddSchedule} on:save={saveSchedule} />
-	{/if}
-
-	{#if showRepeatSchedule}
-		<RepeatSchedule
-			on:close={() => (showRepeatSchedule = false)}
-			on:saveRepeat={saveRepeatSchedule}
-		/>
-	{/if}
-
-	{#if showShareSchedule}
-		<ShareSchedule on:close={closeShareSchedule} on:share={handleSharedFriends} />
-	{/if}
 </div>
 
 <style>

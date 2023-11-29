@@ -28,7 +28,8 @@ export async function insertRecord(locals, formData) {
 		location: formData.get('location'),
 		schedule_name: formData.get('schedule_name'),
 		importance_level: formData.get('importance_level'),
-		repeat: formData.get('repeat')
+		repeat: formData.get('repeat'),
+		bg_color: formData.get('bg_color')
 	};
 	const record = await locals.pb.collection('Schedule').create(data);
 
@@ -48,7 +49,8 @@ export async function updateRecord(locals, formData) {
 		location: formData.get('location'),
 		schedule_name: formData.get('schedule_name'),
 		importance_level: formData.get('importance_level'),
-		repeat: formData.get('repeat')
+		repeat: formData.get('repeat'),
+		bg_color: formData.get('bg_color')
 	};
 
 	const record = await locals.pb.collection('Schedule').update(id, data);
