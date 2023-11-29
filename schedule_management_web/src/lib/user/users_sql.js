@@ -42,11 +42,6 @@ export async function updateRecord(locals, formData) {
 export async function deleteRecord(locals, formData) {
 	const id = formData.get('id');
 	const deleteUser = await locals.pb.collection('users').delete(id);
-	const deleteGoal = await locals.pb.collection('Goal').delete(id);
-	const deleteGrade = await locals.pb.collection('Grade').delete(id)
-	const deleteSchedule = await locals.pb.collection('Schedule').delete(id)
-	const deleteTimeTable = await locals.pb.collection('TimeTable').delete(id)
-	const deleteTodoList = await locals.pb.collection('TodoList').delete(id)
-
+	
 	throw redirect(303, '/');
 }
