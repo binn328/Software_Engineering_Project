@@ -1,11 +1,13 @@
 <script>
 	import Component_addSchedule from '$lib/component/addSchedule_ver2.svelte';
+	import Component_editSchedule from '$lib/component/editSchedule_ver2.svelte';
 	export let data;
 	// db에서 가져온 스케줄 목록
 	const scheduleList = data.scheduleList;
 
 	/* 페이지 동작에 필요한 변수들 */
 	let showAddSchedule = false;
+	let showEditSchedule = false;
 
 	/* 페이지 동작에 필요한 함수들 */
 	function addSchedule() {
@@ -13,6 +15,13 @@
 	}
 	function closeAddSchedule() {
 		showAddSchedule = false;
+	}
+
+	function editSchedule() {
+		showEditSchedule = true;
+	}
+	function closeEditSchedule() {
+		showEditSchedule = false;
 	}
 
 	/** 중요도를 보고 배경 색을 반환한다.
@@ -29,20 +38,32 @@
 			return 'gray';
 		}
 	}
+
+	/**
+	 * @param {string} datetime
+	 */
+	function convert_date(datetime) {
+		const options = { year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short' };
+		return new Date(datetime).toLocaleDateString('ko-KR', options);
+	}
 </script>
 
 <div class="container">
 	{#each scheduleList as schedule}
-		<form method="post" action="?/updateSchedule">
+		<form method="post">
 			<div class="schedule-item" style="background-color: {getBgColor(schedule.importance_level)};">
-				<div class="date-day" style="color:black;">{schedule.start_date}</div>
+				<div class="date-day" style="color:black;">{convert_date(schedule.start_date)}</div>
 				<div class="event-container">
 					<div class="event" style="background-color: rgba(255, 255, 255, 0.8);">
 						{schedule.schedule_name}
 						<input name="id" type="text" value={schedule.id} hidden />
 					</div>
+					{#if showEditSchedule}
+						<Component_editSchedule {schedule} on:close={closeEditSchedule} />
+					{/if}
 					<div class="buttons">
-						<button class="button pink" type="submit" formaction="?/deleteSchedule">Delete</button>
+						<button class="button blue" type="button" on:click={editSchedule}>수정</button>
+						<button class="button pink" type="submit" formaction="?/deleteSchedule">삭제</button>
 					</div>
 				</div>
 			</div>

@@ -1,3 +1,5 @@
+import { redirect } from '@sveltejs/kit';
+
 /**
  *
  * @param {App.Locals} locals 현재 로그인된 유저의 정보들이 담겨있다.
@@ -28,7 +30,7 @@ export async function insertRecord(locals, formData) {
 	};
 	const record = await locals.pb.collection('Grade').create(data);
 
-	return record;
+	throw redirect(303, '/grade');
 }
 
 /**
@@ -48,7 +50,7 @@ export async function updateRecord(locals, formData) {
 
 	const record = await locals.pb.collection('Grade').update(formData.get('id'), data);
 
-	return record;
+	throw redirect(303, '/grade');
 }
 /**
  *
@@ -59,5 +61,5 @@ export async function updateRecord(locals, formData) {
 export async function deleteRecord(locals, formData) {
 	const result = await locals.pb.collection('Grade').delete(formData.get('id'));
 
-	return result;
+	throw redirect(303, '/grade');
 }

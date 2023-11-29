@@ -27,7 +27,7 @@ export async function insertRecord(locals, formData) {
 	};
 	const record = await locals.pb.collection('TodoList').create(data);
 
-	return record;
+	throw redirect(303, '/todoList');
 }
 
 /**
@@ -46,7 +46,7 @@ export async function updateRecord(locals, formData) {
 
 	const record = await locals.pb.collection('TodoList').update(formData.get('id'), data);
 
-	return record;
+	throw redirect(303, '/todoList');
 }
 /**
  *
@@ -57,5 +57,5 @@ export async function updateRecord(locals, formData) {
 export async function deleteRecord(locals, formData) {
 	const result = await locals.pb.collection('TodoList').delete(formData.get('id'));
 
-	return result;
+	throw redirect(303, '/todoList');
 }

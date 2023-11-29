@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import PocketBase from 'pocketbase';
 
 const pb = new PocketBase('http://127.0.0.1:8090');
@@ -24,11 +25,11 @@ export async function insertRecord(locals, formData) {
 	const data = {
 		owner: locals.pb.authStore.model?.id,
 		is_complete: formData.get('is_complete'),
-		goal_name: formData.get('goal_name'),
+		goal_name: formData.get('goal_name')
 	};
 	const record = await locals.pb.collection('Goal').create(data);
 
-	return record;
+	throw redirect(303, '/goal');
 }
 
 /**
@@ -40,12 +41,12 @@ export async function updateRecord(locals, formData) {
 	const id = formData.get('id');
 	const data = {
 		is_complete: formData.get('is_complete'),
-		goal_name: formData.get('goal_name'),
+		goal_name: formData.get('goal_name')
 	};
 
 	const record = await locals.pb.collection('Goal').update(id, data);
 
-	return record;
+	throw redirect(303, '/goal');
 }
 
 /**
@@ -57,5 +58,5 @@ export async function deleteRecord(locals, formData) {
 	const id = formData.get('id');
 	const record = await locals.pb.collection('Goal').delete(id);
 
-	return record;
+	throw redirect(303, '/goal');
 }
