@@ -31,8 +31,7 @@
   
 	let subjects = [];
   
-	let majorGPA = 0;
-	let totalCredits = 0;
+
   
 	// 각 학기별로 subjects 배열을 관리
 	let semestersSubjects = Array.from({ length: semester.length }, () => [
@@ -52,6 +51,7 @@
 	// 함수를 통해 사용자 입력을 처리
 	function handleInput() {
 	  calculateGPA();
+	
 	}
   
 	// 함수를 통해 학기를 변경
@@ -79,6 +79,7 @@
 		  console.error('Error loading data from localStorage:', error);
 		}
 	  }
+	  
 	}
   
 	// localStorage에 데이터를 저장하는 함수
@@ -86,22 +87,6 @@
 	  localStorage.setItem('semestersSubjects', JSON.stringify(semestersSubjects));
 	}
   
-	// 현재 학기에 해당하는 데이터로 업데이트 및 localStorage에 저장
-	function updateSemesterData() {
-	  const { year, term } = semester[currentSemester];
-	  // 현재 학기에 해당하는 subjects 배열 선택
-	  subjects = semestersSubjects[currentSemester];
-  
-	  subjects.forEach((subject) => {
-		subject.name = ''; //과목명
-		subject.credits = ''; //학점
-		subject.grade = ''; //성적
-		subject.isMajor = false; //전공
-	  });
-  
-	  // localStorage에 데이터 저장
-	  saveSemestersSubjects();
-	}
   
 	function gradeToGPA(grade) {
 	  switch (grade) {
@@ -129,22 +114,22 @@
 	}
   
 	function calculateGPA() {
-	  // Initialize cumulative values
+	 
 	  totalScore = 0;
 	  majorScore = 0;
 	  earnedCredits = 0;
 	  let majorCredit = 0;
   
-	  // Loop through all semesters
+	  // 전체학기 
 	  for (let i = 0; i < semestersSubjects.length; i++) {
 		const semesterSubjects = semestersSubjects[i];
   
-		// Loop through subjects in the current semester
+		// 현재학기꺼 
 		semesterSubjects.forEach((subject) => {
 		  const credits = parseFloat(subject.credits);
   
 		  if (!isNaN(credits) && subject.grade.trim() !== '') {
-			// Update cumulative values
+			// 값 업데이트
 			earnedCredits += credits;
 			totalScore += gradeToGPA(subject.grade.toUpperCase()) * credits;
   
@@ -156,48 +141,46 @@
 		});
 	  }
   
-	  // Calculate overall GPA
+	  // 전체 평점
 	  if (earnedCredits !== 0) {
 		totalScore /= earnedCredits;
 	  }
   
-	  // Calculate overall major GPA
+	  // 전공평점
 	  if (majorCredit !== 0) {
 		majorScore /= majorCredit;
 	  }
   
-	  // After calculating GPA, redraw the line graph
-	  drawLineGraph();
+	drawLineGraph();	  
+	drawBarChart();
+      
 	}
-  
-  
-  
-  
+	
 	let svg;
-  
-	
-  
-  
+	let svgBarChart;
 	onMount(() => {
-  
-	  // Create the SVG container
-	
-	  svg = d3.select('.left-rectangle')
-		.append('svg')
-		.attr('width', 450) // Set the width of the SVG container (adjust as needed)
-		.attr('height', 250) // Set the height of the SVG container (adjust as needed)
+    // LineGraph설정
+    svg = d3.select('.left-rectangle')
+      .append('svg')
+      .attr('width', 450) 
+      .attr('height', 250) 
+      .style('border', '1px solid rgba(0,0,0,0.2)')
+      .style('border-radius', '10px');
+
+    
+    drawLineGraph();
+
+	//barChart설정
+	svgBarChart = d3.select('.left-rectangle').append('svg')
+      .attr('width', 450)  
+      .attr('height', 250)  
 	  .style('border', '1px solid rgba(0,0,0,0.2)')
-	  .style('border-radius','10px');
-	  // Draw the line graph
-	
+      .style('border-radius', '10px');
   
-		drawLineGraph();
-		
-  
+	drawBarChart();
 	});
+
   
-  
-  //요게 그나마 완성본=================================================
   function drawLineGraph() {
 	  // Extract total GPA values for each semester
 	  const totalGPAs = semestersSubjects.map((semesterSubjects) => {
@@ -216,27 +199,23 @@
 		return earnedCredits !== 0 ? totalScore / earnedCredits : 0;
 	  });
   
-	  // Define the dimensions and margins for the line graph
+	 
 	  const margin = { top: 10, right: 20, bottom: 20, left: 40 };
 	  const width = 400 - margin.left - margin.right;
 	  const height = 200 - margin.top - margin.bottom;
   
-	  // Define the scales
 	  const xScale = d3.scaleLinear().domain([0, totalGPAs.length - 1]).range([0, width]);
 	  const yScale = d3.scaleLinear().domain([0, maxTotalScore]).range([height, 0]);
   
-	  // Define the line function
 	  const line = d3.line()
 		.x((d, i) => xScale(i))
 		.y((d) => yScale(d));
   
-	  // Remove existing line before drawing a new one
+	
 	  svg.selectAll('.line').remove();
 	  
   
-   
-  
-	  // Append the line to the SVG container
+	  // 값
 	  svg.append('path')
 		.data([totalGPAs])
 		.attr('class', 'line')
@@ -245,7 +224,7 @@
 		.style('fill', 'none')
 		.style('stroke', 'red');
   
-  // Draw grid lines for the y-axis
+  // Y축 회색 선 
   svg.selectAll('.grid-line')
 	  .data([{ value: 2.0, label: '2.0' }, { value: 3.0, label: '3.0' },{ value: 4.0, label: '4.0' }])
 	  .enter()
@@ -262,11 +241,11 @@
 			  .style('stroke', 'gray')
 			  .style('stroke-opacity', (d) => (d === 2.0 || d === 4.0) ? 1.0 : 0.2);
   
-		  // Append text labels next to the grid lines
+		  
 		  d3.select(this)
 			  .append('text')
 			  .attr('class', 'grid-label')
-			  .attr('x', width + margin.left + 5) // Adjust the horizontal position for the text
+			  .attr('x', width + margin.left + 5) 
 			  .attr('y', yScale(d.value) + margin.top)
 			  .attr('dy', 5)
 			  .style('fill', 'gray')
@@ -275,7 +254,7 @@
 	  });
   
   
-  // Append x-axis labels (showing year and term on separate lines)
+  // X축 학년 학기 
   svg.selectAll('text.x-axis-label')
 	  .data(semester)
 	  .enter()
@@ -295,16 +274,128 @@
 	  .append('text')
 	  .attr('class', 'x-axis-label2')
 	  .attr('x', (d, i) => xScale(i) + margin.left)
-	  .attr('y', height + margin.top + 42) // Adjust the vertical position for the second line
+	  .attr('y', height + margin.top + 42) 
 	  .attr('dy', 12)
 	  .attr('text-anchor', 'middle')
 	  .style('fill', 'black')
 	  .style('font-size','10px')
 	  .text((d) => `${d.term}학기`);
-  }
   
-  
-  </script>
+
+    
+}
+
+  let gradeDistribution = [];
+
+
+  function drawBarChart() {
+	
+	console.log('Start drawBarChart');
+    
+	// Check if there's data available
+    if (!semestersSubjects || semestersSubjects.length === 0) {
+      console.log('No data available for the bar chart');
+      return;
+    }
+
+	svgBarChart.selectAll('*').remove();
+
+	
+
+    
+    // 해당 성적 개수 
+    let gradeCounts = {
+      'A+': 0,
+      'A': 0,
+      'B+': 0,
+      'B': 0,
+      'C+': 0,
+      'C': 0,
+      'D+': 0,
+      'D': 0,
+      'F': 0
+    };
+
+    semestersSubjects.forEach(semesterSubjects => {
+    semesterSubjects.forEach(subject => {
+      const grade = subject.grade.toUpperCase();
+      if (gradeCounts.hasOwnProperty(grade)) {
+        gradeCounts[grade]++;
+      }
+    });
+});
+    gradeDistribution = Object.keys(gradeCounts).map(grade => {
+      return {
+        grade: grade,
+        count: gradeCounts[grade],
+      
+		percentage: (gradeCounts[grade] / getTotalSubjectCount()) * 100
+    };  
+	
+    });
+	console.log('Grade Distribution:', gradeDistribution);
+ 
+    
+    const marginBarChart = { top: 30, right: 20, bottom: 20, left: 60 };
+    const widthBarChart = 400 - marginBarChart.left - marginBarChart.right;
+    const heightBarChart = 250 - marginBarChart.top - marginBarChart.bottom;
+  const yScaleBarChart = d3.scaleBand().domain(gradeDistribution.map(d => d.grade)).range([0, heightBarChart]).padding(0.1);
+  const xScaleBarChart = d3.scaleLinear().domain([0, 100]).range([0, widthBarChart]);
+
+  // 값
+ svgBarChart.selectAll('.bar') 
+    .data(gradeDistribution)
+    .enter().append('rect')
+    .attr('class', 'bar')
+    .attr('y', d => yScaleBarChart(d.grade) + marginBarChart.top)
+    .attr('height', yScaleBarChart.bandwidth())
+    .attr('x', marginBarChart.left)
+    .attr('width', d => xScaleBarChart(d.percentage))
+    .style('fill', 'steelblue');
+
+  // y-axis
+  svgBarChart.selectAll('text.y-axis-label-bar-chart')
+    .data(gradeDistribution)
+    .enter()
+    .append('text')
+    .attr('class', 'y-axis-label-bar-chart')
+    .attr('x', marginBarChart.left - 30)
+    .attr('y', d => yScaleBarChart(d.grade) + marginBarChart.top + yScaleBarChart.bandwidth() / 2)
+    .attr('dy', 5)
+    .style('fill', 'black')
+    .style('font-size', '10px')
+    .text(d => d.grade);
+
+  // x-axis
+  svgBarChart.selectAll('text.x-axis-label-bar-chart')
+    .data([25, 50, 75, 100])
+    .enter()
+    .append('text')
+    .attr('class', 'x-axis-label-bar-chart')
+    .attr('x', d => xScaleBarChart(d) + marginBarChart.left)
+    .attr('y', heightBarChart + marginBarChart.top + 12)
+    .attr('text-anchor', 'middle')
+    .style('fill', 'black')
+    .style('font-size', '10px')
+    .text(d => `${d}%`);
+	  console.log('End drawBarChart');
+	}
+	function getTotalSubjectCount() {
+  // Calculate the total number of subjects across all semesters with non-empty grades
+  //return semestersSubjects.reduce((total, semesterSubjects) => {
+    //return total + semesterSubjects.filter(subject => subject.grade.trim() !== '').length;
+  //}, 0);
+
+  return semestersSubjects.reduce((total, semesterSubjects) => {
+    return total + semesterSubjects.filter(subject => subject.grade.trim() !== '').length;
+  }, 0);
+}
+
+let inputValue = '';
+
+
+
+ </script>
   
   
   <div class="container">
@@ -321,15 +412,14 @@
   
 	  <div class="graph-container">
 		  <div class="left-rectangle">
-  
-			  
-  
+ 
+	
 			  <p>전체 평점: {totalScore.toFixed(2)} <span class="max-value">/{maxTotalScore}</span></p>
 			  <p>전공 평점: {majorScore.toFixed(2)} <span class="max-value">/{maxMajorScore}</span></p>
 			  <p>취득 학점: {earnedCredits} <span class="max-value">/{maxCredits}</span></p>
-			  
+			  	<div class='bar-chart-container'></div>
 		  </div>
-  
+		  
 		  <div class="right-rectangle">
 			  <table>
 				  <thead>
@@ -376,6 +466,7 @@
   </div>
   
   <style>
+
 	  .container {
 		  display: flex;
 		  flex-direction: column;

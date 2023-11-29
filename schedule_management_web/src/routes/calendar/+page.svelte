@@ -169,9 +169,9 @@ function saveSchedule() {
 
   let checklistItems = [];
 
-  const toggleChecklistItem = (id) => {
+  const toggleEditChecklistItem = (id) => {
     checklistItems = checklistItems.map(item =>
-      item.id === id ? { ...item, completed: !item.completed } : item
+      item.id === id ? { ...item, isEditing: !item.isEditing } : item
     );
   };
 
@@ -339,6 +339,8 @@ function saveSchedule() {
   .checklist-container {
     width: 300px; /* Adjust the width as needed */
     margin-left: 20px;
+    max-height: 700px;
+    overflow-y: auto;
   }
 
   .checklist-container h2 {
@@ -349,8 +351,9 @@ function saveSchedule() {
 
   .checklist-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 8px;
+    flex-wrap: wrap;
   }
 
   .checklist-item input {
@@ -362,125 +365,167 @@ function saveSchedule() {
     font-size: 12px; /* Adjust font size as needed */
   }
   .checklist-item button {
-    padding: 4px 8px; /* Adjust padding as needed */
+    padding: 0; /* Adjust padding as needed */
     font-size: 12px; /* Adjust font size as needed */
-    width: 70px; /* Set a fixed width for the Remove buttons */
-    margin: 0 0 0 auto;
+    /*width: 50px;*/
+    margin: 0 4px;
+    border: 0;
 
+  }
+
+  .checklist-item button.edit-button {
+    width: 50px;
+  }
+
+  .checklist-item span {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .text-container {
+    /*display: block;
+    word-wrap: break-word;
+    white-space: pre-wrap;*/
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+  }
+
+  .text-container span {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .button-container {
+    display: flex;
+    align-items: center;
   }
 
 </style>
 
-<div class="container">
-<div class="calendar-container">
-  <div class="month-navigation">
-    <button on:click={prevMonth}>&lt;</button>
-    <h1>{currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}</h1>
-    <button on:click={nextMonth}>&gt;</button>
-  </div>
-  <div class="calendar">
-    {#each daysOfWeek as dayOfWeek}
-      <div class="day" key={dayOfWeek}>{dayOfWeek}</div>
-    {/each}
-    
-    {#each daysInMonth as day}
-  {#if day === null}
-    <div class="day" />
-  {:else}
-    <div
-      class:day
-      class:selected={day.getTime() === selectedDate.getTime()}
-      class:today={todayDate.toDateString() === day.toDateString()}
-      style={`background-color: ${getBackgroundColor(day)}`}
-      on:click={() => selectDate(day)}>
-      {day.getDate()}
 
-      <!-- Display schedules for the current day -->
-      {#each yourScheduleArray as schedule}
-        {#if isDateInRange(day, schedule.startDate, schedule.endDate)}
-          <div>
-            <p>{schedule.scheduleName}</p>
-            <!-- Add more schedule details as needed -->
+
+<div class="container">
+  <div class="calendar-container">
+    <div class="month-navigation">
+      <button on:click={prevMonth}>&lt;</button>
+      <h1>{currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}</h1>
+      <button on:click={nextMonth}>&gt;</button>
+    </div>
+    <div class="calendar">
+      {#each daysOfWeek as dayOfWeek}
+        <div class="day" key={dayOfWeek}>{dayOfWeek}</div>
+      {/each}
+
+      {#each daysInMonth as day}
+        {#if day === null}
+          <div class="day" />
+        {:else}
+          <div
+            class:day
+            class:selected={day.getTime() === selectedDate.getTime()}
+            class:today={todayDate.toDateString() === day.toDateString()}
+            style={`background-color: ${getBackgroundColor(day)}`}
+            on:click={() => selectDate(day)}>
+            {day.getDate()}
+
+            <!-- Display schedules for the current day -->
+            {#each yourScheduleArray as schedule}
+              {#if isDateInRange(day, schedule.startDate, schedule.endDate)}
+                <div>
+                  <p>{schedule.scheduleName}</p>
+                  <!-- Add more schedule details as needed -->
+                </div>
+              {/if}
+            {/each}
           </div>
         {/if}
       {/each}
     </div>
-  {/if}
-{/each}
-  </div>
-  
-  <div class="modal {isModalOpen ? 'active' : ''}" on:click={closeModal}>
-    <div class="modal-content" on:click={(e) => e.stopPropagation()}>
-      <!-- Inside the modal-content div -->
-      {#if isAddingEvent}
-      <AddSchedule
-        bind:startDate={formattedStartDate}
-        bind:endDate={endDate}
-        bind:scheduleName={scheduleName}
-        bind:location={location}
-        bind:bgColor={selectedColor} 
-        bind:repeat={repeat}
-        on:save={saveSchedule}
-        on:close={cancelAddEvent}
-        selectedDate={formattedStartDate}
-      />
-      <!-- Move the "Add" button inside the AddSchedule component -->
-      <div class="add-event-button">
-        <button on:click={saveSchedule}>Add</button>
+
+    <div class="modal {isModalOpen ? 'active' : ''}" on:click={closeModal}>
+      <div class="modal-content" on:click={(e) => e.stopPropagation()}>
+        <!-- Inside the modal-content div -->
+        {#if isAddingEvent}
+          <AddSchedule
+            bind:startDate={formattedStartDate}
+            bind:endDate={endDate}
+            bind:scheduleName={scheduleName}
+            bind:location={location}
+            bind:bgColor={selectedColor} 
+            bind:repeat={repeat}
+            on:save={saveSchedule}
+            on:close={cancelAddEvent}
+            selectedDate={formattedStartDate}
+          />
+          <!-- Move the "Add" button inside the AddSchedule component -->
+          <div class="add-event-button">
+            <button on:click={saveSchedule}>Add</button>
+          </div>
+        {:else}
+          {#if editModeData}
+            <!-- Display schedule content for the selected date -->
+            <p>Schedule Name: {editModeData.scheduleName}</p>
+            <p>Location: {editModeData.location}</p>
+            <!-- Add more fields as needed -->
+
+            <!-- Display checklist if visible -->
+            {#if isChecklistVisible}
+              <h3>Checklist</h3>
+              <div class="checklist">
+                <!-- Add checklist items here -->
+              </div>
+            {/if}
+
+            <!-- Keep the "Add" button below the schedule content -->
+            <div class="add-event-button">
+              <button on:click={addEvent}>Add</button>
+            </div>
+          {:else}
+            <!-- Default modal content -->
+            <p>Modal content goes here</p>
+            <p>Selected Date: {selectedDate.toLocaleDateString()}</p>
+            <div class="add-event-button">
+              <button on:click={addEvent}>Add</button>
+            </div>
+          {/if}
+        {/if}
       </div>
-{:else}
-{#if editModeData}
-  <!-- Display schedule content for the selected date -->
-  <p>Schedule Name: {editModeData.scheduleName}</p>
-  <p>Location: {editModeData.location}</p>
-  <!-- Add more fields as needed -->
-
-  <!-- Display checklist if visible -->
-  {#if isChecklistVisible}
-    <h3>Checklist</h3>
-    <div class="checklist">
-      <!-- Add checklist items here -->
-    </div>
-  {/if}
-
-  <!-- Keep the "Add" button below the schedule content -->
-  <div class="add-event-button">
-    <button on:click={addEvent}>Add</button>
-  </div>
-{:else}
-  <!-- Default modal content -->
-  <p>Modal content goes here</p>
-  <p>Selected Date: {selectedDate.toLocaleDateString()}</p>
-  <div class="add-event-button">
-    <button on:click={addEvent}>Add</button>
-  </div>
-{/if}
-{/if}
-
     </div>
   </div>
-  </div>
 
-<!-- Add the checklist container outside the calendar-container div -->
-<div class="checklist-container">
-  <h2>Checklist</h2>
-  {#each checklistItems as item (item.id)}
+  <!-- Add the checklist container outside the calendar-container div -->
+  <div class="checklist-container">
+    <h2>Checklist</h2>
+    {#each checklistItems as item (item.id)}
     <div class="checklist-item">
       <input type="checkbox" bind:checked={item.completed} />
-      <span>{item.text}</span>
-      <button on:click={() => removeChecklistItem(item.id)}>Remove</button>
+      <div class="text-container">
+        {#if item.isEditing}
+          <!-- Display an input field when the item is being edited -->
+          <input type="text" bind:value={item.text} />
+        {:else}
+          <span>{item.text}</span>
+        {/if}
+      </div>
+      <div class="button-container">
+        <button class="checklist-button edit-button" on:click={() => toggleEditChecklistItem(item.id)}>
+          {item.isEditing ? 'Save' : 'Edit'}
+        </button>
+        <button class="checklist-button" on:click={() => removeChecklistItem(item.id)}>Remove</button>
+      </div>
     </div>
-  {/each}
+    {/each}
 
-  <!-- Add the input field and button for adding a new checklist item -->
-  <div class="add-checklist-item">
-    <input
-      type="text"
-      placeholder="New List"
-      bind:value={newChecklistItemText}
-    />
-    <!-- Add the button to call the addChecklistItem function -->
-    <button on:click={addChecklistItem}>Add</button>
+    <!-- Add the input field and button for adding a new checklist item -->
+    <div class="add-checklist-item">
+      <input
+        type="text"
+        placeholder="New List"
+        bind:value={newChecklistItemText}
+      />
+      <!-- Add the button to call the addChecklistItem function -->
+      <button on:click={addChecklistItem}>Add</button>
+    </div>
   </div>
-</div>
 </div>
