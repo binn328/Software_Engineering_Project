@@ -1,6 +1,5 @@
 <script>
-    export let data;
+	export let data;
 </script>
 
-
-<h1>웰컴! {data.profile?.name || ''}</h1>
+<h1>어서오세요 {data.profile?.name || ''}</h1>

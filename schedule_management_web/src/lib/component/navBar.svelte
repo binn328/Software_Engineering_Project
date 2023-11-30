@@ -7,11 +7,10 @@
 <nav>
 	<!--타이틀-->
 	<ul>
-		<li><strong>Schedule Manager</strong></li>
+		<li><a href="/">Schedule Management</a></li>
 	</ul>
 	<!--네비게이션-->
 	<ul>
-		<li><a href="/">Home</a></li>
 		<li><a href="/schedule">Schedule</a></li>
 		<li><a href="/calendar">Calendar</a></li>
 		<li><a href="/grade">Grade</a></li>
@@ -28,6 +27,7 @@
 						>{data.profile?.name}</summary
 					>
 					<ul role="listbox">
+						<li><a href='/auth/profile'>profile</a></li>
 						<li><a href="/auth/logout">logout</a></li>
 					</ul>
 				</details>
