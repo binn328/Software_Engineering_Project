@@ -91,7 +91,6 @@
 			<th scope="col">등급</th>
 			<th scope="col">평점</th>
 			<th scope="col" style="width: 90px">수정</th>
-			<th scope="col" style="width: 90px">삭제</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -106,7 +105,6 @@
 					<td style="width: 90px"
 						><button class="small-button" on:click={() => showEditGrade(grade)}>수정</button></td
 					>
-					<td style="width: 90px"><button class="small-button">삭제</button></td>
 				</tr>
 				{#if is_show_edit_grade}
 					<ComponentEditGrade {editData} on:close={closeEditGrade} />
@@ -151,9 +149,17 @@
 		border: 1px solid #ddd;
 		padding: 8px;
 		text-align: center;
+		position: relative;
 	}
 
 	.small-button {
 		font-size: 12px;
+		padding: 8px;
+		text-align: center;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: auto;
 	}
 </style>
