@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import Component_editGoal from '$lib/component/editGoal.svelte';
+    import Component_addSchedule from '$lib/component/addCalendarSchedule.svelte';
 
     let currentDate = new Date(); // 현재 날짜
     let todayDate = new Date(); // 오늘 날짜
@@ -20,16 +21,18 @@
       isRepeating: false,
     };
   
-    let checklistItems = []; // 체크리스트 아이템 배열
-    let newChecklistItemText = '';
-    let isChecklistVisible = true; // 체크리스트 표시 여부
     let eventsByDate = {}; // 날짜별 이벤트 저장 객체
     let isCalendarInitialized = false; // 캘린더 초기화 여부
 
     export let data;
     const goalList = data.goalList;
+    const scheduleList = data.scheduleList;
 
     let showEditGoal = false;
+    let showAddSchedule = false;
+    export let componentData = {
+      selectedDate
+	};
 
     function editGoal() {
 		showEditGoal = true;
@@ -37,7 +40,15 @@
 	function closeEditGoal() {
 		showEditGoal = false;
 	}
-
+	function addSchedule() {
+    componentData = {
+      selectedDate
+    };
+		showAddSchedule = true;
+	}
+	function closeAddSchedule() {
+		showAddSchedule = false;
+	}
   
   
     // 이벤트 추가 함수
@@ -298,36 +309,87 @@
   };
   
   
-  // 체크리스트 아이템 편집 토글 함수
-    const toggleEditChecklistItem = (id) => {
-      checklistItems = checklistItems.map(item =>
-        item.id === id ? { ...item, isEditing: !item.isEditing } : item
-      );
-    };
-  
-  // 체크리스트 아이템 추가 함수
-    const addChecklistItem = () => {
-      if (newChecklistItemText.trim() !== '') {
-        const newItem = { id: checklistItems.length + 1, text: newChecklistItemText, completed: false };
-        checklistItems = [...checklistItems, newItem];
-        newChecklistItemText = '';
-      }
-    };
-  
-    // 체크리스트 아이템 삭제 함수
-    const removeChecklistItem = (id) => {
-      checklistItems = checklistItems.filter(item => item.id !== id);
-    };
-  
-    // 체크리스트 표시 여부 토글 함수
-    const toggleChecklistVisibility = () => {
-      isChecklistVisible = !isChecklistVisible;
-    };
-  
-  
-  
   </script>
   
+  <div class="container">
+    <div class="calendar-container">
+      <div class="month-navigation">
+        <button on:click={prevMonth}>&lt;</button>
+        <h1>{currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}</h1>
+        <button on:click={nextMonth}>&gt;</button>
+      </div>
+      <div class="calendar">
+        {#each daysOfWeek as dayOfWeek}
+          <div class="day" key={dayOfWeek}>{dayOfWeek}</div>
+        {/each}
+        {#each daysInMonth as day}
+          {#if day === null}
+            <div class="day" />
+          {:else}
+            <div
+              class:day
+              class:selected={day.getTime() === selectedDate.getTime()}
+              class:today={todayDate.toDateString() === day.toDateString()}
+              class:event={getEventsForSelectedDate(day).length > 0}
+              style={`background-color: ${getEventColor(day)}`}
+              on:click={() => selectDate(day)}
+              data-date={day.toISOString()}>
+              {day.getDate()}
+              {#if getEventsForSelectedDate(day).length > 0}
+                <div class="event-indicator"></div>
+              {/if}
+            </div>
+          {/if}
+        {/each}
+        {#if showAddSchedule}
+        <Component_addSchedule {componentData} on:close={closeAddSchedule} />
+        {/if}
+        <div class="modal {isModalOpen ? 'active' : ''}" on:click={closeModal}>
+          <div class="modal-content">
+            <p>{selectedDate.toLocaleDateString()}</p>
+            <button on:click={addSchedule}>일정추가</button>
+          </div>
+        </div>
+      </div>
+  
+
+    </div>
+  
+    <div class="checklist-container">
+      <h2>목표 노트</h2>
+      {#each goalList as goal}
+        <div class="checklist-item">
+          {#if goal.is_complete==true}
+          <input type="checkbox" checked disabled/>
+          {:else}
+          <input type="checkbox" disabled/>
+          {/if}
+          <div class="text-container">
+              <span>{goal.goal_name}</span>
+          </div>
+          {#if showEditGoal}
+          <Component_editGoal {goal} on:close={closeEditGoal} />
+          {/if}
+          <div class="button-container">
+            <form method="post">
+              <button type="button" on:click={editGoal}>수정</button>
+            <input name="id" type="text" value={goal.id} hidden>
+            <button type="submit" onclick="alert('삭제되었습니다.')" formaction="?/deleteGoal">삭제</button>
+          </form>
+          </div>
+        </div>
+      {/each}
+  
+      <div class="add-checklist-item">
+        <form method="post" action="?/addGoal">
+        <input type="text" placeholder="새 목표" name="goal_name" />
+        <select name="is_complete" value="false" hidden></select>
+        <button type="submit">추가</button>
+      </form>
+      </div>
+    </div>
+  </div>
+
   <style>
   
     body {
@@ -585,135 +647,3 @@
   }
   
   </style>
-
-  <div class="container">
-    <div class="calendar-container">
-      <div class="month-navigation">
-        <button on:click={prevMonth}>&lt;</button>
-        <h1>{currentDate.toLocaleDateString('default', { month: 'long', year: 'numeric' })}</h1>
-        <button on:click={nextMonth}>&gt;</button>
-      </div>
-      <div class="calendar">
-        {#each daysOfWeek as dayOfWeek}
-          <div class="day" key={dayOfWeek}>{dayOfWeek}</div>
-        {/each}
-        {#each daysInMonth as day}
-          {#if day === null}
-            <div class="day" />
-          {:else}
-            <div
-              class:day
-              class:selected={day.getTime() === selectedDate.getTime()}
-              class:today={todayDate.toDateString() === day.toDateString()}
-              class:event={getEventsForSelectedDate(day).length > 0}
-              style={`background-color: ${getEventColor(day)}`}
-              on:click={() => selectDate(day)}
-              data-date={day.toISOString()}>
-              {day.getDate()}
-              {#if getEventsForSelectedDate(day).length > 0}
-                <div class="event-indicator"></div>
-              {/if}
-            </div>
-          {/if}
-        {/each}
-  
-      </div>
-  
-      <div class="modal {isModalOpen ? 'active' : ''}" on:click={closeModal}>
-        <div class="modal-content" on:click={(e) => e.stopPropagation()}>
-          <!-- Inside the modal-content div -->
-          {#if isAddingEvent}
-          <!-- Content for adding an event -->
-          <p>Adding Event from {selectedDate.toLocaleDateString()} to {eventDetails.deadline}</p>
-  
-          <label for="deadline">Deadline:</label>
-          {#if isSelectingDeadline}
-            <!-- Display date selector -->
-            <div>
-              <input type="date" bind:value={eventDetails.deadline} />
-              <button on:click={() => selectDeadline(new Date(eventDetails.deadline))}>Select</button>
-              <button on:click={cancelDeadlineSelection}>Cancel</button>
-            </div>
-          {:else}
-            <!-- Display selected deadline -->
-            <div>
-              <span>{eventDetails.deadline}</span>
-              <button on:click={openDeadlineSelector}>Change</button>
-            </div>
-          {/if}
-  
-          <label for="eventName">Event Name:</label>
-          <input type="text" bind:value={eventDetails.eventName} />
-  
-          <label for="location">Location:</label>
-          <input type="text" bind:value={eventDetails.location} />
-  
-          <div class="add-event-button">
-            <button on:click={saveEvent}>Save</button>
-            <button on:click={cancelAddEvent}>Cancel</button>
-          </div>
-          {:else}
-          <!-- Default modal content -->
-          <p>Modal content goes here</p>
-          {#if eventDetails.length > 0}
-          <div class="event-details-container">
-            <p>{selectedDate.toLocaleDateString()}</p>
-            {#each eventDetails as event (event.eventName)}
-              <p>{selectedDate.toLocaleDateString()} - {event.deadline}</p>
-              <p>Event Name: {event.eventName}</p>
-              <p>Location: {event.location}</p>
-              <!-- Add buttons for modifying and deleting events -->
-              <div class="button-container">
-                <button on:click={() => modifyEvent(event)}>Modify</button>
-                <button on:click={() => deleteEvent(event)}>Delete</button>
-              </div>
-            {/each}
-          </div>
-          
-          {/if}
-  
-          <div class="add-event-button">
-            <button on:click={addEvent}>Add</button>
-          </div>
-          {/if}
-  
-        </div>
-      </div>
-    </div>
-  
-    <div class="checklist-container">
-      <h2>목표 노트</h2>
-      {#each goalList as goal}
-        <div class="checklist-item">
-          {#if goal.is_complete==true}
-          <input type="checkbox" checked disabled/>
-          {:else}
-          <input type="checkbox" disabled/>
-          {/if}
-          <div class="text-container">
-              <span>{goal.goal_name}</span>
-          </div>
-          {#if showEditGoal}
-          <Component_editGoal {goal} on:close={closeEditGoal} />
-          {/if}
-          <div class="button-container">
-            <form method="post">
-              <button type="button" on:click={editGoal}>수정</button>
-            <input name="id" type="text" value={goal.id} hidden>
-            <button type="submit" onclick="alert('삭제되었습니다.')" formaction="?/deleteGoal">삭제</button>
-          </form>
-          </div>
-        </div>
-      {/each}
-  
-      <div class="add-checklist-item">
-        <form method="post" action="?/addGoal">
-        <input type="text" placeholder="새 목표" name="goal_name" />
-        <select name="is_complete" value="false" hidden></select>
-        <button type="submit">추가</button>
-      </form>
-      </div>
-    </div>
-  </div>
-
- 
