@@ -16,7 +16,9 @@
 	let semester = 1;
 	/* 연도와 학기가 일치하는 grade레코드들 */
 	let filteredGradeList = filterGrade(gradeList, year, semester);
+	/* 졸업 요건 표에 들어갈 전체 요약 정보 */
 	let summary = summarize(gradeList);
+	/* 학기 요약에 들어갈 학기 요약 정보 */
 	let summaryFiltered = summarize_filtered(filteredGradeList);
 
 	/* 학기 이동 함수
@@ -116,7 +118,7 @@
 		is_show_edit_grade = false;
 	}
 
-	/* 요약해주는 함수 */
+	/* 학기를 요약해주는 함수 */
 	function summarize_filtered(filteredGradeList) {
 		const generalCredits = filteredGradeList
 			.filter((filterGrade) => filterGrade.is_major === 'false')
@@ -138,6 +140,8 @@
 			averageGPA: averageGPA
 		};
 	}
+
+	/* 전체 학기를 요약해주는 함수 */
 	function summarize(gradeList) {
 		const generalCredits = gradeList
 			.filter((grade) => grade.is_major === 'false')
@@ -158,15 +162,6 @@
 			remainCredits
 		};
 	}
-	// let generalCredits = courses
-	// 	.filter((course) => course.category === '교양')
-	// 	.reduce((sum, course) => sum + course.credit, 0);
-	// let majorCredits = courses
-	// 	.filter((course) => course.category === '전공')
-	// 	.reduce((sum, course) => sum + course.credit, 0);
-	// let totalCredits = generalCredits + majorCredits;
-	// let averageGPA =
-	// 	courses.reduce((sum, course) => sum + course.gpa * course.credit, 0) / totalCredits;
 </script>
 
 <!-- 학년 학기를 이동시키는 네비게이션 -->
@@ -222,6 +217,7 @@
 <p />
 <hr />
 <p />
+<!-- 학기 요약 표 -->
 <div align="center">
 	<h1>{year}학년 {semester}학기 요약</h1>
 </div>
@@ -249,6 +245,7 @@
 <hr />
 <p />
 
+<!-- 졸업 요건 정리 표 -->
 <div align="center">
 	<h1>졸업 요건</h1>
 </div>
