@@ -8,7 +8,7 @@ const pb = new PocketBase('http://127.0.0.1:8090');
  * @param {App.Locals} locals 현재 로그인된 유저의 정보들이 담겨있다.
  * @returns
  */
-export async function findRecordByOwner(locals) {
+export async function findGoalRecordByOwner(locals) {
 	const records = await locals.pb.collection('Goal').getFullList({
 		// 현재 로그인된 유저가 생성한 goal 레코드들만 가져온다.
 		filter: `owner = "${locals.pb.authStore.model?.id}"`
@@ -21,7 +21,7 @@ export async function findRecordByOwner(locals) {
  * @param {App.Locals} locals
  * @param {*} formData
  */
-export async function insertRecord(locals, formData) {
+export async function insertGoalRecord(locals, formData) {
 	const data = {
 		owner: locals.pb.authStore.model?.id,
 		is_complete: formData.get('is_complete'),
@@ -29,7 +29,7 @@ export async function insertRecord(locals, formData) {
 	};
 	const record = await locals.pb.collection('Goal').create(data);
 
-	throw redirect(303, '/goal');
+	throw redirect(303, '/calendar');
 }
 
 /**
@@ -37,7 +37,7 @@ export async function insertRecord(locals, formData) {
  * @param {App.Locals} locals
  * @param {*} formData
  */
-export async function updateRecord(locals, formData) {
+export async function updateGoalRecord(locals, formData) {
 	const id = formData.get('id');
 	const data = {
 		is_complete: formData.get('is_complete'),
@@ -46,7 +46,7 @@ export async function updateRecord(locals, formData) {
 
 	const record = await locals.pb.collection('Goal').update(id, data);
 
-	throw redirect(303, '/goal');
+	throw redirect(303, '/calendar');
 }
 
 /**
@@ -54,9 +54,9 @@ export async function updateRecord(locals, formData) {
  * @param {App.Locals} locals
  * @param {*} formData
  */
-export async function deleteRecord(locals, formData) {
+export async function deleteGoalRecord(locals, formData) {
 	const id = formData.get('id');
 	const record = await locals.pb.collection('Goal').delete(id);
 
-	throw redirect(303, '/goal');
+	throw redirect(303, '/calendar');
 }
