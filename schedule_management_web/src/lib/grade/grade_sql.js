@@ -89,3 +89,17 @@ export async function findgraduateCredit(locals) {
 
 	return result.graduate_credit;
 }
+/** 학년 학기의 자료를 가져온다.
+ *
+ * @param {App.Locals} locals
+ * @param {number} year 학년
+ * @param {number} semester 학기
+ */
+export async function findGradeBySemester(locals, year, semester) {
+	const records = await locals.pb.collection('Grade').getFullList({
+		// 현재 로그인된 유저가 생성한 grade 레코드들만 가져온다.
+		filter: `owner = "${locals.pb.authStore.model?.id}" && year = "${year}" && semester = "${semester}"`
+	});
+
+	return records;
+}

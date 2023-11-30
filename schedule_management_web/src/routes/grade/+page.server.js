@@ -1,8 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import {
 	deleteRecord,
+	findGradeBySemester,
 	findRecordByOwner,
-	findYears,
 	findgraduateCredit,
 	insertRecord,
 	updateRecord
@@ -17,11 +17,13 @@ export async function load({ locals }) {
 
 	// 데이터베이스에서 유저가 생성해두었던 grade 데이터를 가져온다.
 	const gradeList = findRecordByOwner(locals);
-	const graduate_credit = findgraduateCredit(locals);
+	// const graduate_credit = findgraduateCredit(locals);
+	// const one_one_gradeList = findGradeBySemester(locals, 1, 1);
 
 	return {
-		gradeList: gradeList,
-		graduate_credit: graduate_credit
+		gradeList: gradeList
+		// graduate_credit: graduate_credit,
+		// one_one_gradeList: one_one_gradeList
 	};
 }
 
@@ -49,5 +51,12 @@ export const actions = {
 				code: 400
 			};
 		}
+	},
+	getGrades: async ({ locals, request }) => {
+		const formData = await request.formData();
+
+		const result = await findGradeBySemester(locals, formData.year, formData.semester);
+
+		return result;
 	}
 };
