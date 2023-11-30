@@ -16,14 +16,14 @@ export async function load({ locals }) {
 	}
 
 	// 데이터베이스에서 유저가 생성해두었던 grade 데이터를 가져온다.
-	const gradeList = findRecordByOwner(locals);
-	// const graduate_credit = findgraduateCredit(locals);
-	// const one_one_gradeList = findGradeBySemester(locals, 1, 1);
+	const gradeList = await findRecordByOwner(locals);
+	const graduate_credit = await findgraduateCredit(locals);
+	const one_one_gradeList = await findGradeBySemester(locals, 1, 1);
 
 	return {
-		gradeList: gradeList
-		// graduate_credit: graduate_credit,
-		// one_one_gradeList: one_one_gradeList
+		gradeList: gradeList,
+		graduate_credit: graduate_credit,
+		one_one_gradeList: one_one_gradeList
 	};
 }
 

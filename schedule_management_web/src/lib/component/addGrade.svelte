@@ -5,9 +5,9 @@
 	function close() {
 		dispatch('close');
 	}
-	export let data;
-	const year = data.year;
-	const semester = data.semester;
+	export let componentData;
+	const year = componentData.year;
+	const semester = componentData.semester;
 </script>
 
 <div class="add-grade-modal">
@@ -30,11 +30,15 @@
 		</label>
 		<label>
 			학년
-			<input name="year" type="number" required min="1" max="6" />
+			<input name="year" type="number" value={year} required min="1" max="6" />
 		</label>
 		<label>
 			학기
-			<input name="semester" type="number" required min="1" max="2" />
+			<input name="semester" type="number" value={semester} required min="1" max="2" />
+		</label>
+		<label>
+			점수
+			<input name="grade" type="number" required min="0.0" max="4.5" step="0.5" value="4.0" />
 		</label>
 		<div class="buttons">
 			<button type="submit">추가하기</button>
