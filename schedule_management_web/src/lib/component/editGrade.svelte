@@ -16,7 +16,7 @@
 </script>
 
 <div class="edit-grade-modal">
-	<form method="post" action="?/editGrade">
+	<form method="post" action="?/updateGrade">
 		<h2>학점 수정하기</h2>
 		<div class="scrollable-content">
 			<label>
@@ -50,14 +50,18 @@
 		</div>
 
 		<div class="buttons">
-			<button type="submit">수정하기</button>
+			<div style="display: flex; justify-content: space-between">
+				<button type="submit" style="width: 45%">수정하기</button>
+				<button type="submit" formaction="?/deleteGrade" style="width: 45%" class="pink"
+					>삭제하기</button
+				>
+			</div>
 			<button type="reset" on:click={close}>닫기</button>
 		</div>
 	</form>
 </div>
 
 <style>
-	/* AddSchedule 컴포넌트에 대한 스타일 추가 */
 	.edit-grade-modal {
 		position: fixed;
 		top: 50%;
@@ -77,7 +81,16 @@
 	}
 
 	.scrollable-content {
-		max-height: 500px; /* 스크롤 가능한 최대 높이 설정 */
+		max-height: 550px; /* 스크롤 가능한 최대 높이 설정 */
 		overflow-y: auto; /* 세로 스크롤 활성화 */
+	}
+	.pink {
+		background-color: #ff7979; /* Light Pink */
+		color: #fff;
+	}
+
+	.blue {
+		background-color: #3498db; /* Dodger Blue */
+		color: #fff;
 	}
 </style>
