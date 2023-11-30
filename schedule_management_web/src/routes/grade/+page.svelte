@@ -10,6 +10,8 @@
 	let year = 1;
 	let semester = 1;
 	let filteredGradeList = filterGrade(gradeList, year, semester);
+	let summary = summarize(gradeList);
+	let summaryFiltered = summarize_filtered(filteredGradeList);
 
 	/* 학기 이동 함수 */
 	function move_semester(n) {
@@ -30,6 +32,7 @@
 			semester = 2;
 		}
 		filteredGradeList = filterGrade(gradeList, year, semester);
+		summaryFiltered = summarize_filtered(filteredGradeList);
 	}
 
 	/* gradeList 필터 함수 */
@@ -98,6 +101,49 @@
 	function closeEditGrade() {
 		is_show_edit_grade = false;
 	}
+
+	/* 요약해주는 함수 */
+	function summarize_filtered(filteredGradeList) {
+		const generalCredits = filteredGradeList
+			.filter((filterGrade) => filterGrade.is_major === 'false')
+			.reduce((sum, filterGrade) => sum + filterGrade.credit, 0);
+		const majorCredits = filteredGradeList
+			.filter((filterGrade) => filterGrade.is_major === 'true')
+			.reduce((sum, filterGrade) => sum + filterGrade.credit, 0);
+		const totalCredits = generalCredits + majorCredits;
+		const averageGPA =
+			filteredGradeList.reduce(
+				(sum, filterGrade) => sum + filterGrade.grade * filterGrade.credit,
+				0
+			) / totalCredits;
+
+		return {
+			generalCredits: generalCredits,
+			majorCredits: majorCredits,
+			totalCredits: totalCredits,
+			averageGPA: averageGPA
+		};
+	}
+	function summarize(gradeList) {
+		const generalCredits = gradeList
+			.filter((grade) => grade.is_major === 'false')
+			.reduce((sum, grade) => sum + grade.credit, 0);
+		const majorCredits = gradeList
+			.filter((grade) => grade.is_major === 'true')
+			.reduce((sum, grade) => sum + grade.credit, 0);
+		const totalCredits = generalCredits + majorCredits;
+		const averageGPA =
+			gradeList.reduce((sum, grade) => sum + grade.grade * grade.credit, 0) / totalCredits;
+		const remainCredits = graduate_credit - totalCredits;
+
+		return {
+			generalCredits,
+			majorCredits,
+			totalCredits,
+			averageGPA,
+			remainCredits
+		};
+	}
 	// let generalCredits = courses
 	// 	.filter((course) => course.category === '교양')
 	// 	.reduce((sum, course) => sum + course.credit, 0);
@@ -155,8 +201,12 @@
 {#if is_show_add_grade}
 	<ComponentAddGrade {componentData} on:close={closeAddGrade} />
 {/if}
-
-<h1>{year}학년 {semester}학기 요약</h1>
+<p />
+<hr />
+<p />
+<div align="center">
+	<h1>{year}학년 {semester}학기 요약</h1>
+</div>
 
 <table role="grid">
 	<thead>
@@ -169,7 +219,45 @@
 	</thead>
 	<tbody>
 		<tr>
-			<!-- 여기에 요약 정보 표시 코드 추가 -->
+			<td>{summaryFiltered.generalCredits}</td>
+			<td>{summaryFiltered.majorCredits}</td>
+			<td>{summaryFiltered.totalCredits}</td>
+			<td>{summaryFiltered.averageGPA.toFixed(2)}</td>
+		</tr>
+	</tbody>
+</table>
+
+<p />
+<hr />
+<p />
+
+<div align="center">
+	<h1>졸업 요건</h1>
+</div>
+
+<table>
+	<thead>
+		<tr>
+			<th />
+			<th>졸업학점</th>
+			<th>교양학점</th>
+			<th>전공학점</th>
+			<th>잔여학점</th>
+			<th>평균점수</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>기준</td>
+			<td>{graduate_credit}</td>
+			<td rowspan="2">{summary.generalCredits}</td>
+			<td rowspan="2">{summary.majorCredits}</td>
+			<td rowspan="2">{summary.remainCredits}</td>
+			<td rowspan="2">{summary.averageGPA.toFixed(2)}</td>
+		</tr>
+		<tr>
+			<td>현재</td>
+			<td>{summary.totalCredits}</td>
 		</tr>
 	</tbody>
 </table>
