@@ -686,9 +686,9 @@
       {#each goalList as goal}
         <div class="checklist-item">
           {#if goal.is_complete==true}
-          <input type="checkbox" checked/>
+          <input type="checkbox" checked disabled/>
           {:else}
-          <input type="checkbox" />
+          <input type="checkbox" disabled/>
           {/if}
           <div class="text-container">
               <span>{goal.goal_name}</span>
