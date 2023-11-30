@@ -63,3 +63,29 @@ export async function deleteRecord(locals, formData) {
 
 	throw redirect(303, '/grade');
 }
+
+/**
+ *
+ * @param {App.Locals} locals 현재 로그인된 유저의 정보들이 담겨있다.
+ * @returns
+ */
+export async function findgraduateCredit(locals) {
+	let result = await locals.pb
+		.collection('users')
+		.getFirstListItem(`id="${locals.pb.authStore.model?.id}"`);
+
+	if (result.graduate_credit == 0) {
+		const data = {
+			username: result.username,
+			emailVisibility: result.emailVisibility,
+			password: result.password,
+			passwordConfirm: result.passwordConfirm,
+			oldPassword: result.oldPassword,
+			name: result.name,
+			graduate_credit: 130
+		};
+		result = await locals.pb.collection('users').update(result.id, data);
+	}
+
+	return result.graduate_credit;
+}
