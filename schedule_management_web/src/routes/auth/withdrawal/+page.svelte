@@ -8,23 +8,25 @@
     function goProfile(){
         window.location.href ='/auth/profile';
     }
-
+    export let data;
    
 </script>
 
 <article>
+    <form method="post">
     <h1>회원탈퇴 하시겠습니까?</h1>
     <div class="btn">
-        <button type="button" on:click={openModal}>예</button>
+        <input name="id" type="text" value={data.profile?.id} hidden>
+        <button type="submit" onclick="alert('탈퇴되었습니다.')" formaction="?/deleteUsers">예</button>
         <button type="button" on:click={goProfile}>아니오</button>
     </div>
+</form>
 </article>
 
 {#if showModal}
 <div class="modal">
     <div class="modal-content">
         <p>회원탈퇴되었습니다.</p>
-        <a href="/">홈으로</a>
     </div>
 </div>
 {/if}
