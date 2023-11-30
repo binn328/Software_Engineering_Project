@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { deleteRecord, findRecordByOwner, insertRecord, updateRecord } from '$lib/schedule/schedule_sql';
+import { deleteRecord, findRecordByOwner, insertCalendarRecord, updateRecord } from '$lib/schedule/schedule_sql';
 import { deleteGoalRecord, findGoalRecordByOwner, insertGoalRecord, updateGoalRecord } from '$lib/goal/goal_sql';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -23,7 +23,7 @@ export async function load({ locals }) {
 
 export const actions = {
 	addSchedule: async ({ locals, request }) => {
-		const result = insertRecord(locals, await request.formData());
+		const result = insertCalendarRecord(locals, await request.formData());
 
 		return result;
 	},
