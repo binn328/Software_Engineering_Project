@@ -6,11 +6,40 @@
 	export let data;
 	const gradeList = data.gradeList;
 	const graduate_credit = data.graduate_credit;
-	const one_one_gradeList = data.one_one_gradeList;
 
 	let year = 1;
 	let semester = 1;
+	let filteredGradeList = filterGrade(gradeList, year, semester);
 
+	/* 학기 이동 함수 */
+	function move_semester(n) {
+		semester += n;
+		if (semester > 2) {
+			semester = 1;
+			year += 1;
+		} else if (semester < 1) {
+			semester = 2;
+			year -= 1;
+		}
+
+		if (year < 1) {
+			year = 1;
+			semester = 1;
+		} else if (year > 6) {
+			year = 6;
+			semester = 2;
+		}
+		filteredGradeList = filterGrade(gradeList, year, semester);
+	}
+
+	/* gradeList 필터 함수 */
+	function filterGrade(gradeList, year, semester) {
+		const filteredGrade = gradeList.filter(
+			(grade) => grade.year == year && grade.semester == semester
+		);
+
+		return filteredGrade;
+	}
 	export let componentData = {
 		year,
 		semester
@@ -80,7 +109,15 @@
 	// 	courses.reduce((sum, course) => sum + course.gpa * course.credit, 0) / totalCredits;
 </script>
 
-<h1>{year}학년 {semester}학기</h1>
+<div align="center">
+	<form>
+		<div class="semester-navigation">
+			<button on:click={() => move_semester(-1)}>&lt;</button>
+			<h1>{year}학년 {semester}학기</h1>
+			<button on:click={() => move_semester(1)}>&gt;</button>
+		</div>
+	</form>
+</div>
 
 <table role="grid">
 	<thead>
@@ -94,8 +131,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#if one_one_gradeList.length > 0}
-			{#each one_one_gradeList as grade (grade.id)}
+		{#if filteredGradeList.length > 0}
+			{#each filteredGradeList as grade (grade.id)}
 				<tr>
 					<td>{convert_is_major(grade.is_major)}</td>
 					<td>{grade.subject}</td>
@@ -143,6 +180,12 @@
 		border-collapse: collapse;
 		margin-bottom: 20px;
 	}
+	h1 {
+		font-size: 24px;
+		margin: 0;
+		white-space: nowrap;
+		margin-bottom: 20px;
+	}
 
 	th,
 	td {
@@ -161,5 +204,13 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		width: auto;
+	}
+	.semester-navigation {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 25%;
+		margin-top: 20px;
+		gap: 10px;
 	}
 </style>

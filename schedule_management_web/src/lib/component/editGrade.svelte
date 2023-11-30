@@ -16,7 +16,7 @@
 </script>
 
 <div class="edit-grade-modal">
-	<form method="post" action="?/editGrade">
+	<form method="post" action="?/updateGrade">
 		<h2>학점 수정하기</h2>
 		<div class="scrollable-content">
 			<label>
