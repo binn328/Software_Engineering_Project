@@ -18,6 +18,8 @@
 		end_date
 	};
 
+	let filteredTodoList = filtered_todoList(todoList, start_date, end_date);
+
 	// 현재 날짜를 가져오는 함수
 	function getCurrentDate() {
 		const today = new Date();
@@ -25,6 +27,22 @@
 		const month = String(today.getMonth() + 1).padStart(2, '0');
 		const day = String(today.getDate()).padStart(2, '0');
 		return `${year}-${month}-${day}`;
+	}
+
+	// 날짜 기간을 업데이트하는 함수
+	function updateDate(daynum) {
+		const today = new Date();
+		if (daynum != 0) {
+			today.setDate(today.getDate() + daynum);
+		}
+		const year = today.getFullYear();
+		const month = String(today.getMonth() + 1).padStart(2, '0');
+		const day = String(today.getDate()).padStart(2, '0');
+
+		end_date = `${year}-${month}-${day}`;
+		showDateOptions = false;
+
+		filteredTodoList = filtered_todoList(todoList, start_date, end_date);
 	}
 
 	// AddTodo를 열고 닫는 함수
@@ -39,21 +57,34 @@
 	function closeAddTodo() {
 		is_show_addTodo = false;
 	}
+
+	// 주어진 기간 내의 할일만 반환하는 함수
+	function filtered_todoList(todoList, start_date, end_date) {
+		const start_dateObj = new Date(start_date);
+		const end_dateObj = new Date(end_date);
+
+		const filteredTodoList = todoList.filter(
+			(todo) =>
+				new Date(todo.start_date) >= start_dateObj && new Date(todo.start_date) <= end_dateObj
+		);
+
+		console.log(filteredTodoList);
+		return filteredTodoList;
+	}
 </script>
 
 <div>
 	<h1>Todolist</h1>
 
 	<div class="details-container">
-		<details role="list" open={showDateOptions}>
+		<details role="list" bind:open={showDateOptions}>
 			<summary aria-haspopup="listbox" role="link" class="secondary">기간</summary>
 			<ul role="listbox">
-				<li role="button" class="datelist" on:click={() => selectDate('오늘')}>오늘</li>
-
-				<li role="button" class="datelist" on:click={() => selectDate('내일')}>내일</li>
-				<li role="button" class="datelist" on:click={() => selectDate('일주일')}>일주일</li>
-				<li role="button" class="datelist" on:click={() => selectDate('한달')}>한달</li>
-				<li role="button" class="datelist" on:click={() => selectDate('일년')}>일년</li>
+				<li role="button" class="datelist" on:click={() => updateDate(0)}>오늘</li>
+				<li role="button" class="datelist" on:click={() => updateDate(1)}>내일</li>
+				<li role="button" class="datelist" on:click={() => updateDate(6)}>일주일</li>
+				<li role="button" class="datelist" on:click={() => updateDate(29)}>한달</li>
+				<li role="button" class="datelist" on:click={() => updateDate(364)}>일년</li>
 			</ul>
 		</details>
 
@@ -66,7 +97,7 @@
 	</div>
 
 	<div class="todo-container">
-		{#each todoList as todo}
+		{#each filteredTodoList as todo}
 			<form method="post" action="?/updateTodo">
 				<div class="task">
 					<input type="datetime" name="start_date" value={todo.start_date} hidden />
