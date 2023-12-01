@@ -8,10 +8,15 @@
 	// details의 열림 여부를 지정하는 변수
 	let showDateOptions = false;
 	// AddTodo 컴포넌트의 표시 여부를 지정하는 변수
-	let showAddTodo = false;
+	let is_show_addTodo = false;
 
 	let start_date = getCurrentDate();
 	let end_date = getCurrentDate();
+
+	let component_data = {
+		start_date,
+		end_date
+	};
 
 	// 현재 날짜를 가져오는 함수
 	function getCurrentDate() {
@@ -20,6 +25,19 @@
 		const month = String(today.getMonth() + 1).padStart(2, '0');
 		const day = String(today.getDate()).padStart(2, '0');
 		return `${year}-${month}-${day}`;
+	}
+
+	// AddTodo를 열고 닫는 함수
+	function showAddTodo() {
+		component_data = {
+			start_date,
+			end_date
+		};
+		is_show_addTodo = true;
+	}
+
+	function closeAddTodo() {
+		is_show_addTodo = false;
 	}
 </script>
 
@@ -49,20 +67,31 @@
 
 	<div class="todo-container">
 		{#each todoList as todo}
-			<form method="post">
+			<form method="post" action="?/updateTodo">
 				<div class="task">
-					<input type="checkbox" value={todo.is_complete} on:click|stopPropagation />
-					<p>{todo.memo}</p>
+					<input type="datetime" name="start_date" value={todo.start_date} hidden />
+					<input type="datetime" name="end_date" value={todo.end_date} hidden />
+					<input
+						type="checkbox"
+						name="is_complete"
+						value={todo.is_complete}
+						on:click|stopPropagation
+					/>
+					<input type="text" name="memo" value={todo.memo} />
+					<input type="text" name="category" value={todo.category} hidden />
+					<input type="text" name="id" value={todo.id} hidden />
+					<button class="button" type="submit">저장</button>
+					<button class="button" type="submit" formaction="?/deleteTodo">삭제</button>
 				</div>
 			</form>
 		{/each}
 
-		{#if showAddTodo}
-			<AddTodo on:close={closeAddTodo} />
+		{#if is_show_addTodo}
+			<ComponentAddTodo {component_data} on:close={closeAddTodo} />
 		{/if}
 
-		<div class="add-todo" on:click={addTodo}>
-			<button class="btn">+</button>
+		<div class="add-todo">
+			<button class="btn" on:click={showAddTodo}>+</button>
 		</div>
 	</div>
 </div>
@@ -131,5 +160,14 @@
 		color: black;
 		width: 15%;
 		border: none;
+	}
+	.button {
+		margin-left: 10px;
+		padding: 8px 12px;
+		font-size: 14px;
+		cursor: pointer;
+		border-radius: 5px;
+		width: 80px;
+		height: 60px;
 	}
 </style>
