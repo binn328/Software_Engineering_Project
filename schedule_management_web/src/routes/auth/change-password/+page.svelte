@@ -30,6 +30,7 @@
             display:block;
             justify-content: center;
             align-items: center;
+            max-width: 800px;
     }
     
     article{
@@ -40,5 +41,8 @@
             padding:70px; /*로그인창 크기조절*/
             border-radius:20px;
             
+        }
+        button{
+            background-color:rgb(52, 69, 126)
         }
     </style>

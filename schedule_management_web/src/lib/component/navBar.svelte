@@ -21,7 +21,7 @@
          <li><a href="/timetable">TimeTable</a></li>
       </ul>
       <!--유저 정보-->
-      <ul>
+      <ul >
          {#if data?.profile}
             <!--로그인된 상태라면 유저 이름을 표시하고 logout을 표시-->
             <li>
@@ -74,6 +74,9 @@
       display: flex;
       justify-content: space-between;
    }
+   .secondary{
+      color:white;
+   }
 
    li {
       display: inline-block;
@@ -84,6 +87,7 @@
       text-decoration: none;
       color: white;  /*원하는 글자색으로 변경 */
    }
+   
 
    /* 추가적인 스타일을 적용할 수 있습니다. */
    .rectangular-box {

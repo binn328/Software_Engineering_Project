@@ -16,3 +16,19 @@
             </div>
         </div>
 </article>
+
+<style>
+    article{
+        max-width: 800px;
+      margin: 20px auto;
+      font-family: 'Arial', sans-serif;
+      transition: background-color 0.3s ease;
+      background-color: white;
+      padding: 30px;
+      box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
+    }
+    a{
+    
+        background-color:rgb(52, 69, 126);
+    }
+</style>

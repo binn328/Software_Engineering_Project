@@ -10,10 +10,6 @@
 		<div>
 			<NavBar {data} />
 			
-		
-		</div>
-		<a href="/test"> test</a>
-		<div>
 			<slot />
 		</div>
 	</main>
