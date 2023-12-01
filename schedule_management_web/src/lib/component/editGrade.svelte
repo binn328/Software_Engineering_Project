@@ -51,12 +51,12 @@
 
 		<div class="buttons">
 			<div style="display: flex; justify-content: space-between">
-				<button type="submit" style="width: 45%">수정하기</button>
+				<button type="submit" style="width: 45%" class="blue">수정하기</button>
 				<button type="submit" formaction="?/deleteGrade" style="width: 45%" class="pink"
 					>삭제하기</button
 				>
 			</div>
-			<button type="reset" on:click={close}>닫기</button>
+			<button type="reset" on:click={close} style="background-color: #34347c;">닫기</button>
 		</div>
 	</form>
 </div>
@@ -67,7 +67,7 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background-color: gray;
+		background-color: rgb(229, 229, 236);
 		width: 500px;
 
 		padding: 30px;
@@ -85,12 +85,12 @@
 		overflow-y: auto; /* 세로 스크롤 활성화 */
 	}
 	.pink {
-		background-color: #ff7979; /* Light Pink */
+		background-color: rgb(77, 44, 112); /*#ff7979; /* Light Pink */
 		color: #fff;
 	}
 
 	.blue {
-		background-color: #3498db; /* Dodger Blue */
+		background-color: #34347c; /*#3498db; /* Dodger Blue */
 		color: #fff;
 	}
 </style>
