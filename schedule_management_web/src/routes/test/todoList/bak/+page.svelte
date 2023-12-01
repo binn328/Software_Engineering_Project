@@ -1,4 +1,5 @@
 <script>
+	//@ts-nocheck
 	import AddTodo from '$lib/component/AddTodo.svelte';
 
 	export let data;
