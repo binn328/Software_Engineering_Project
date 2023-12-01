@@ -396,7 +396,7 @@
 		max-width: 700px;
 		width: 100%;
 		background-color: #fff;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		box-shadow: 10px 10px 10px 10px rgb(0, 0, 0, 0.5);
 		border-radius: 8px;
 		overflow: hidden;
 		max-height: 800px;
@@ -409,7 +409,7 @@
 		justify-content: space-between;
 		margin-bottom: 8px;
 		padding: 16px;
-		background-color: #3498db;
+		background-color: rgb(73, 73, 111);
 		color: white;
 	}
 
@@ -425,6 +425,11 @@
 
 	.month-navigation button:hover {
 		background-color: rgba(255, 255, 255, 0.1);
+	}
+
+	.month-navigation h1 {
+		color: #ffffff; /* Change the text color to white or your desired color */
+		margin-bottom: 0;
 	}
 
 	h1 {
@@ -453,12 +458,12 @@
 	}
 
 	.day:hover {
-		background-color: #b3d7f0;
+		background-color: #b3baf0;
 		color: white;
 	}
 
 	.selected {
-		background-color: #b3d7f0;
+		background-color: #b3baf0;
 		color: white;
 		/*border-radius: 50%;*/
 	}
@@ -487,7 +492,7 @@
 	}
 
 	.today {
-		background-color: #3498db;
+		background-color: rgb(73, 73, 111);
 		color: white;
 		border-radius: 50%;
 	}
@@ -499,7 +504,7 @@
 	}
 
 	.add-event-button button {
-		background-color: #3498db;
+		background-color: rgb(107, 107, 161);
 		color: white;
 		padding: 8px 16px;
 		border: none;
@@ -508,7 +513,7 @@
 	}
 
 	.add-event-button button:hover {
-		background-color: #297fb8;
+		background-color: rgb(73, 73, 111);
 	}
 
 	.event {
@@ -524,7 +529,7 @@
 	}
 
 	.checklist-container h2 {
-		color: #3498db;
+		color: rgb(73, 73, 111);
 		margin-bottom: 8px;
 		text-align: center;
 	}
@@ -578,6 +583,9 @@
 		max-height: 700px;
 		overflow-y: auto;
 		display: block; /* Set the default display value */
+		background-color: #f5f5f5;
+		padding: 20px;
+		box-shadow: 10px 10px 10px 10px rgb(0, 0, 0, 0.5);
 	}
 
 	.checklist-container-hidden {
