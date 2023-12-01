@@ -24,7 +24,16 @@
        
         margin:0 auto;
         border-radius:20px;
+        max-width: 800px;
+ 
+      transition: background-color 0.3s ease;
+      background-color: white;
+      padding: 30px;
+      box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
       
+    }
+    button{
+        background-color:rgb(52,69,126);
     }
     h1{
         text-align: center;
@@ -41,6 +50,6 @@
     }
 
 p{
-    font-size:12px;
+    font-size:13px;
 }
 </style>

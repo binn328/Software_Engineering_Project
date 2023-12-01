@@ -35,8 +35,8 @@
 		</label>
 
 		<div class="buttons">
-			<button type="submit">추가하기</button>
-			<button type="reset" on:click={close}>닫기</button>
+			<button class="btn1" type="submit">추가하기</button>
+			<button class="btn1" type="reset" on:click={close}>닫기</button>
 		</div>
 	</form>
 </div>
@@ -47,12 +47,15 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background-color: rgb(255, 255, 255);
+		background-color: white;
 		width: 500px;
 
 		padding: 30px;
 		border-radius: 8px;
 		box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 		z-index: 1000;
+	}
+	.btn1{
+		background-color:rgb(52,69,126);
 	}
 </style>

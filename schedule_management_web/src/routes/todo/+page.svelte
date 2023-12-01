@@ -1,79 +1,100 @@
 <script>
 	//@ts-nocheck
 	import ComponentAddTodo from '$lib/component/AddTodo.svelte';
-
+ 
 	export let data;
 	const todoList = data.todoList;
-
+ 
 	// details의 열림 여부를 지정하는 변수
 	let showDateOptions = false;
 	// AddTodo 컴포넌트의 표시 여부를 지정하는 변수
 	let is_show_addTodo = false;
-
+ 
 	let start_date = getCurrentDate();
 	let end_date = getCurrentDate();
-
+ 
 	let component_data = {
-		start_date,
-		end_date
+	   start_date,
+	   end_date
 	};
-
+ 
 	let filteredTodoList = filtered_todoList(todoList, start_date, end_date);
-
+ 
 	// 현재 날짜를 가져오는 함수
 	function getCurrentDate() {
-		const today = new Date();
-		const year = today.getFullYear();
-		const month = String(today.getMonth() + 1).padStart(2, '0');
-		const day = String(today.getDate()).padStart(2, '0');
-		return `${year}-${month}-${day}`;
+	   const today = new Date();
+	   const year = today.getFullYear();
+	   const month = String(today.getMonth() + 1).padStart(2, '0');
+	   const day = String(today.getDate()).padStart(2, '0');
+	   return `${year}-${month}-${day}`;
 	}
-
+ 
 	// 날짜 기간을 업데이트하는 함수
 	function updateDate(daynum) {
-		const today = new Date();
-		if (daynum != 0) {
-			today.setDate(today.getDate() + daynum);
-		}
-		const year = today.getFullYear();
-		const month = String(today.getMonth() + 1).padStart(2, '0');
-		const day = String(today.getDate()).padStart(2, '0');
-
-		end_date = `${year}-${month}-${day}`;
-		showDateOptions = false;
-
-		filteredTodoList = filtered_todoList(todoList, start_date, end_date);
+	   const today = new Date();
+	   if (daynum != 0) {
+		  today.setDate(today.getDate() + daynum);
+	   }
+	   const year = today.getFullYear();
+	   const month = String(today.getMonth() + 1).padStart(2, '0');
+	   const day = String(today.getDate()).padStart(2, '0');
+ 
+	   end_date = `${year}-${month}-${day}`;
+	   showDateOptions = false;
+ 
+	   filteredTodoList = filtered_todoList(todoList, start_date, end_date);
 	}
-
+ 
 	// AddTodo를 열고 닫는 함수
 	function showAddTodo() {
-		component_data = {
-			start_date,
-			end_date
-		};
-		is_show_addTodo = true;
+	   component_data = {
+		  start_date,
+		  end_date
+	   };
+	   is_show_addTodo = true;
 	}
-
+ 
 	function closeAddTodo() {
-		is_show_addTodo = false;
+	   is_show_addTodo = false;
 	}
-
+ 
 	// 주어진 기간 내의 할일만 반환하는 함수
 	function filtered_todoList(todoList, start_date, end_date) {
-		const start_dateObj = new Date(start_date);
-		const end_dateObj = new Date(end_date);
-
-		const filteredTodoList = todoList.filter(
-			(todo) =>
-				new Date(todo.start_date) >= start_dateObj && new Date(todo.start_date) <= end_dateObj
-		);
-
-		console.log(filteredTodoList);
-		return filteredTodoList;
+	   const start_dateObj = new Date(start_date);
+	   const end_dateObj = new Date(end_date);
+ 
+	   const filteredTodoList = todoList.filter(
+		  (todo) =>
+			 new Date(todo.start_date) >= start_dateObj && new Date(todo.start_date) <= end_dateObj
+	   );
+ 
+	   console.log(filteredTodoList);
+	   return filteredTodoList;
+	
 	}
+ 
+ 
+	let categories = Array.from(new Set(todoList.map(todo => todo.category)));
+	let showCategoryWindow = false;
+ 
+	   function toggleCategoryWindow() {
+	 showCategoryWindow = !showCategoryWindow;
+	   }
+ 
+	function filterByCategory(category) {
+	 filteredTodoList = todoList.filter(todo => todo.category === category);
+	 toggleCategoryWindow();
+   }
+
+   function closeCategoryWindow() {
+    showCategoryWindow = false;
+  }
+ 
+ 
+
 </script>
 
-<div>
+<div class="container">
 	<h1>Todolist</h1>
 
 	<div class="details-container">
@@ -88,7 +109,18 @@
 			</ul>
 		</details>
 
-		<button class="category-btn">카테고리</button>
+		<button class="category-btn" on:click={toggleCategoryWindow}>카테고리</button>
+      {#if showCategoryWindow}
+      <div class="category-window">
+        <ul>
+         {#each categories as category}
+           <li role="button" class ="category-btns" on:click={() => filterByCategory(category)}>{category}</li>
+         {/each}
+		 <button class="category-cancle" on:click={closeCategoryWindow}>닫기</button>
+        </ul>
+      </div>
+     {/if}
+
 	</div>
 
 	<!-- 현재 설정된 기간을 보여줌 -->
@@ -128,6 +160,50 @@
 </div>
 
 <style>
+	input{
+		background:white;
+		opacity:0.7;
+	}
+	.button{
+		background-color:rgb(79, 79, 197);
+		border:none;
+	}
+	.category-window{
+		position: fixed;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      
+      padding: 20px;
+      border: 1px solid #ccc;
+      z-index: 999; 
+      padding: 30px;
+	  border-radius: 8px;
+	  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.2);
+      width:300px;
+	}
+	.category-btns{
+		border:none;
+		background-color:transparent;
+		text-decoration:underline;
+		color:black;
+		
+	}
+	.category-cancle{
+		border:none;
+		background-color:transparent;
+		color:black;
+	}
+	.container{
+		max-width: 800px;
+    	margin: 20px auto;
+    	font-family: 'Arial', sans-serif;
+    	transition: background-color 0.3s ease;
+    	background-color: white;
+    	padding: 30px;
+    	box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
+	}
 	.showDate {
 		text-align: center;
 	}
@@ -140,11 +216,14 @@
 		background-color: transparent;
 		color: black;
 		border-radius: 10px;
-		border-color: black;
+		border-color: white;
+		color:white;
+		opacity:0.8;
+		
 	}
 
 	.datelist {
-		color: white;
+		color: black;
 		background: none;
 		border: none;
 		transition: background-color 0.3s;
@@ -157,9 +236,11 @@
 	.todo-container {
 		border: 1px solid #ccc;
 		padding: 10px;
-		width: 50%;
+		width: 80%;
 		margin: 20px auto;
-		background-color: #a8a8a8;
+		background-color: rgb(32, 16, 56);
+		opacity:0.8;
+		border-radius:10px;
 	}
 
 	p {
@@ -183,13 +264,13 @@
 	}
 
 	[role='list'] {
-		width: 15%;
+		width: 20%;
 	}
 
 	.category-btn {
 		background-color: transparent;
 		color: black;
-		width: 15%;
+		width: 25%;
 		border: none;
 	}
 	.button {

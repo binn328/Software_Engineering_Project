@@ -21,6 +21,19 @@
         margin-left: 35px;
     }
 
+    article{
+        max-width: 800px;
+      margin: 20px auto;
+      font-family: 'Arial', sans-serif;
+      transition: background-color 0.3s ease;
+      background-color: white;
+      padding: 30px;
+      box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
+    }
+    button{
+        background-color:rgb(52,69,126);
+    }
+
     div {
         width: 100%;
         height: 100%;
