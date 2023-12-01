@@ -196,6 +196,7 @@
 		color:black;
 	}
 	.container{
+		border-radius:10px;
 		max-width: 800px;
     	margin: 20px auto;
     	font-family: 'Arial', sans-serif;
@@ -238,8 +239,8 @@
 		padding: 10px;
 		width: 80%;
 		margin: 20px auto;
-		background-color: rgb(32, 16, 56);
-		opacity:0.8;
+		background-color: rgb(56, 31, 95);
+		
 		border-radius:10px;
 	}
 

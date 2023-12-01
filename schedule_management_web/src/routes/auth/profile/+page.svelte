@@ -18,6 +18,9 @@
 </article>
 
 <style>
+    h1{
+        border-bottom:5px solid;
+    }
     article{
         max-width: 800px;
       margin: 20px auto;

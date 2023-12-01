@@ -17,6 +17,10 @@
 </div>
 
 <style>
+h1{
+    border-bottom:5px solid;
+}
+
     .text-register {
         margin-left: 35px;
     }
