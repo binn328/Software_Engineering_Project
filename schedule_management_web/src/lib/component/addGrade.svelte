@@ -41,21 +41,22 @@
 			<input name="grade" type="number" required min="0.0" max="4.5" step="0.5" value="4.0" />
 		</label>
 		<div class="buttons">
-			<button type="submit">추가하기</button>
-			<button type="reset" on:click={close}>닫기</button>
+			<button type="submit" style="background-color: #34347c;">추가하기</button>
+			<button type="reset" on:click={close} style="background-color: #34347c;">닫기</button>
 		</div>
 	</form>
 </div>
 
 <style>
-	/* AddSchedule 컴포넌트에 대한 스타일 추가 */
 	.add-grade-modal {
 		position: fixed;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background-color: gray;
+		background-color: rgb(229, 229, 236);
 		width: 500px;
+		height: 700px;
+		overflow-y: auto; /* Add this line to enable vertical scrolling */
 
 		padding: 30px;
 		border-radius: 8px;
