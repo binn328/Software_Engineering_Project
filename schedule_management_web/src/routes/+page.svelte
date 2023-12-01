@@ -58,7 +58,7 @@
  </script>
  
  <div>
-	<h1>어서오세요! {data.profile?.name || ''} 님</h1>
+	<h1>어서오세요! {data.profile?.name || ''}님 </h1>
 	<div class="equl-line">
 	   <h2 class="time">
 		  {currentTime.toLocaleTimeString([],
