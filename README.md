@@ -1,12 +1,50 @@
 # Schedule Management Web
 
-3학년 2학기 소프트웨어공학에서 사용하는 프로젝트입니다. 
+3학년 2학기 소프트웨어공학에서 사용하는 프로젝트입니다.
 
 이 문서는 종종 업데이트되니 가끔 들러서 팁들을 확인하세요!
 
 # 프로젝트 설명
 
 본 프로젝트는 웹 기반의 일정 관리 프로그램을 만듭니다.
+
+# 실행하기
+
+아래 명령어를 통해 레포지토리를 복제해옵니다.
+
+```bash
+git clone https://github.com/binn328/Software_Engineering_Project
+```
+
+아래 명령어를 통해 작업 폴더로 이동합니다.
+
+```bash
+cd ./schedule_management_web
+```
+
+여기서 부터 터미널이 2개 필요합니다.
+
+첫번째 터미널에서 아래 명령어를 입력합니다.
+
+아래 명령어로 필요한 패키지를 다운로드 합니다.
+
+```bash
+npm install
+```
+
+아래 명령어로 프로그램을 실행합니다.
+
+```bash
+npm run dev
+```
+
+두 번째 터미널에서 아래 명령어를 입력해 DB를 활성화합니다.
+
+```bash
+npm run pocketbase
+```
+
+http://localhost:5173 으로 접속합니다.
 
 # 레포지토리 복제
 
@@ -24,6 +62,7 @@
 git config --global user.name "github 아이디"
 git config --global user.email "github 이메일"
 ```
+
 # 레포지토리 복제 및 협업(git desktop 이용)
 
 Git Desktop을 이용해 github를 더욱 편리하게 이용할 수 있습니다.
@@ -32,11 +71,12 @@ Git Desktop을 이용해 github를 더욱 편리하게 이용할 수 있습니�
 
 ### 현재 윗글대로 fork로 진행하신 경우 제대로 진행이 안되는 것을 발견했습니다.
 
-권한을 디스코드를 통해 요청하신 후, 
+권한을 디스코드를 통해 요청하신 후,
 
 ```shell
 git clone https://github.com/binn328/Software_Engineering_Project
 ```
+
 을 통해 새로 저장소를 복제하신 후, 브랜치를 통해 작업하셔야합니다.
 
 권한을 부여받았으면 저의 저장소에 직접 접근하는 것이 가능합니다.
@@ -63,7 +103,6 @@ main 브랜치에 곧바로 접근하는 것은 위험하니, 브랜치를 따�
 git clone https://github.com/binn328/Software_Engineering_Project/
 ```
 
-
 # 종속성 설치
 
 [`vs-code`](https://code.visualstudio.com/download)를 이용해 개발합니다.
@@ -84,7 +123,7 @@ npm install
 
 # 서비스 실행하기
 
-`/schedule_management_web` 디렉터리로 이동한 후, 
+`/schedule_management_web` 디렉터리로 이동한 후,
 
 다음 커맨드를 입력하면 서비스를 실행할 수 있습니다.
 
@@ -92,6 +131,7 @@ npm install
 npm run dev
 npm run pocketbase
 ```
+
 터미널을 2개 열어서 각각 실행해주면 됩니다.
 
 `npm run dev` 는 `sveltekit` 를 실행합니다.
@@ -123,7 +163,7 @@ JS Doc은 이 문제를 해결하기 위해 사용하는 툴입니다.
 ```javascript
 // @ts-check
 
-/** 
+/**
  * @type {string}
  */
 let str;
@@ -138,7 +178,7 @@ function add(left_param, right_param) {
 }
 ```
 
-/** 으로 시작하는 주석 내부에 @param, @returns와 같이 해당 변수나 함수를 설명해주면 됩니다.
+/\*\* 으로 시작하는 주석 내부에 @param, @returns와 같이 해당 변수나 함수를 설명해주면 됩니다.
 
 이렇게 하면 코딩 중에 타입 체크를 통해 오류를 조기에 발견할 수 있으며, 코드 작성 중 에디터가 힌트를 제공할 수 있게 됩니다.
 
