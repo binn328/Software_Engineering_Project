@@ -11,9 +11,7 @@
 	let daysInMonth = []; // 월의 날짜 배열
 	let daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // 요일 배열
 	let daysDifference = 0; // 선택 날짜와 현재 날짜의 차이
-
-	let isAddingEvent = false; // 이벤트 추가 중 여부
-	let isSelectingDeadline = false; // 마감일 선택 중 여부
+	
 	let eventDetails = {
 		deadline: '',
 		eventName: '',
@@ -174,22 +172,21 @@
 		}
 	};
 
-	// 수정된 부분: 날짜셀의 배경색을 결정하는 함수
+	// 날짜셀의 배경색을 결정하는 함수
 	const getEventColor = (day) => {
-		const eventsInRange = events.filter((event) => {
-			const eventStartDate = new Date(event.date);
-			const eventEndDate = new Date(event.deadline);
+		const start_date = day;
+		const next_date = new Date(start_date);
+		next_date.setDate(start_date.getDate() + 1);
+	   const filteredschedule = scheduleList.filter(
+		  (schedule) => schedule.start_date.slice(0, 10) == next_date.toISOString().slice(0, 10)
+	   );
 
-			return day.getTime() >= eventStartDate.getTime() && day.getTime() <= eventEndDate.getTime();
-		});
-
-		if (eventsInRange.length === 0) {
-			return ''; // No events for this day
-		} else if (eventsInRange.length === 1) {
-			return eventsInRange[0].color; // Only one event, return its color
-		} else {
-			return '#b3d7f0'; // Set a specific color for cells with multiple events
-		}
+		if (filteredschedule.length == 0) {
+			return ''; // 일정이 없으면 기본색
+		} else if (filteredschedule.length == 1) {
+			return '#b3d7f0'; // 일정이 하나
+		} else if (filteredschedule.length >= 2)
+			return '#ade0e8' // 일정이 둘 이상
 	};
 	const closeModal = () => {
 		isModalOpen = false;
@@ -230,7 +227,6 @@
 						class:day
 						class:selected={day.getTime() === selectedDate.getTime()}
 						class:today={todayDate.toDateString() === day.toDateString()}
-						class:event={getEventsForSelectedDate(day).length > 0}
 						style={`background-color: ${getEventColor(day)}`}
 						on:click={() => selectDate(day)}
 						data-date={day.toISOString()}
