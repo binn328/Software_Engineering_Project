@@ -61,11 +61,8 @@
    function closeEditSchedule() {
       editedSchedule = null;
    }
-	// 이벤트 추가 함수
-	const addEvent = () => {
-		isAddingEvent = true;
-	};
 
+   //각 날짜에 해당하는 일정을 가져오는 함수
 	function filterschedule(scheduleList, selectedDate) {
 		const start_date = selectedDate;
 		const next_date = new Date(start_date);
@@ -76,52 +73,6 @@
  
 		filteredScheduleList = filteredschedule;
 	}
-
-	// 이벤트 저장 함수
-	const saveEvent = () => {
-		const daysInRange = getDaysInRange(selectedDate, new Date(eventDetails.deadline));
-
-		daysInRange.forEach((dayInRange) => {
-			const dateString = dayInRange.toISOString().split('T')[0];
-
-			if (!eventsByDate[dateString]) {
-				eventsByDate[dateString] = [];
-			}
-
-			// Find the existing event on this date
-			const existingEventIndex = eventsByDate[dateString].findIndex(
-				(event) => event.eventName === eventDetails.eventName
-			);
-
-			if (existingEventIndex !== -1) {
-				// Update the existing event
-				eventsByDate[dateString][existingEventIndex] = { ...eventDetails, date: dayInRange };
-			} else {
-				// Add a new event
-				eventsByDate[dateString].push({ ...eventDetails, date: dayInRange });
-			}
-		});
-
-		// Reset eventDetails
-		eventDetails = {
-			deadline: '',
-			eventName: '',
-			location: '',
-			color: '',
-			isRepeating: false
-		};
-
-		isAddingEvent = false;
-		closeModal();
-
-		// Update day styles after saving the event
-		updateDayStyles();
-	};
-
-	// 이벤트 추가 취소 함수
-	const cancelAddEvent = () => {
-		isAddingEvent = false;
-	};
 
 	// 캘린더 업데이트 함수
 	const updateCalendar = () => {
@@ -240,38 +191,10 @@
 			return '#b3d7f0'; // Set a specific color for cells with multiple events
 		}
 	};
-
-	// 날짜 범위 내의 모든 날짜 반환 함수
-	function getDaysInRange(startDate, endDate) {
-		const days = [];
-		const currentDate = new Date(startDate);
-
-		while (currentDate <= endDate) {
-			days.push(new Date(currentDate));
-			currentDate.setDate(currentDate.getDate() + 1);
-		}
-
-		return days;
-	}
-
 	const closeModal = () => {
 		isModalOpen = false;
 		selectedDate = new Date();
 		calculateDaysDifference();
-	};
-
-	const openDeadlineSelector = () => {
-		isSelectingDeadline = true;
-	};
-
-	// 마감일 선택 함수
-	const selectDeadline = (selectedDate) => {
-		eventDetails.deadline = selectedDate.toLocaleDateString();
-		isSelectingDeadline = false;
-	};
-
-	const cancelDeadlineSelection = () => {
-		isSelectingDeadline = false;
 	};
 
 	// 선택한 날짜의 이벤트 가져오기 함수
@@ -286,42 +209,6 @@
 		}));
 	};
 
-	const modifyEvent = (event) => {
-		// Remove the existing event from eventsByDate
-		const dateString = event.date.toISOString().split('T')[0];
-		const eventsOnDate = eventsByDate[dateString] || [];
-		const existingEventIndex = eventsOnDate.findIndex((e) => e.eventName === event.eventName);
-
-		if (existingEventIndex !== -1) {
-			eventsOnDate.splice(existingEventIndex, 1);
-		}
-
-		// Set the event details for modification
-		eventDetails = { ...event };
-		isAddingEvent = true; // Open the modal for modification
-	};
-
-	// Modify the deleteEvent function
-	const deleteEvent = (event) => {
-		// Loop through all dates in eventsByDate
-		Object.keys(eventsByDate).forEach((dateString) => {
-			const eventsOnDate = eventsByDate[dateString];
-
-			// Find the index of the event in the eventsOnDate array
-			const eventIndex = eventsOnDate.findIndex((e) => e.eventName === event.eventName);
-
-			if (eventIndex !== -1) {
-				// Remove the event if it exists on this date
-				eventsOnDate.splice(eventIndex, 1);
-			}
-		});
-
-		// Update day styles after deletion
-		updateDayStyles();
-
-		// Close the modal after deletion
-		closeModal();
-	};
 </script>
 
 <div class="container">
@@ -418,16 +305,6 @@
 </div>
 
 <style>
-	body {
-		font-family: 'Arial', sans-serif;
-		background-color: #f5f5f5;
-		margin: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 100vh;
-	}
-
 	.calendar-container {
 		max-width: 700px;
 		width: 100%;
@@ -533,25 +410,6 @@
 		border-radius: 50%;
 	}
 
-	.add-event-button {
-		display: flex;
-		justify-content: center;
-		margin-top: 16px;
-	}
-
-	.add-event-button button {
-		background-color: rgb(107, 107, 161);
-		color: white;
-		padding: 8px 16px;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-	}
-
-	.add-event-button button:hover {
-		background-color: rgb(73, 73, 111);
-	}
-
 	.event {
 		background-color: var(--event-color, #b3d7f0);
 		color: white;
@@ -588,10 +446,6 @@
 		border: 0;
 	}
 
-	.checklist-item button.edit-button {
-		width: 50px;
-	}
-
 	.text-container {
 		word-break: break-all;
 		display: flex;
@@ -622,10 +476,6 @@
 		background-color: #f5f5f5;
 		padding: 20px;
 		box-shadow: 10px 10px 10px 10px rgb(0, 0, 0, 0.5);
-	}
-
-	.checklist-container-hidden {
-		display: none;
 	}
 
 	.day .event-indicator {
@@ -662,19 +512,5 @@
 	.day.event {
 		background-color: #b3d7f0;
 		color: white;
-	}
-
-	.day.multiple-events {
-		background-color: rgba(255, 255, 255, 0.5); /* Adjust as needed */
-	}
-
-	.day.multiple-events:hover {
-		background-color: rgba(255, 255, 255, 0.7); /* Adjust as needed */
-		color: black; /* Adjust text color as needed */
-	}
-
-	.event-details-container {
-		max-height: 200px; /* Set the maximum height for the event details container */
-		overflow-y: auto; /* Enable vertical scrolling when content exceeds the height */
 	}
 </style>
