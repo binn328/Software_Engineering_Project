@@ -99,7 +99,7 @@ export async function updateCalendarRecord(locals, formData) {
 
 	const record = await locals.pb.collection('Schedule').update(id, data);
 
-	throw redirect(303, '/schedule');
+	throw redirect(303, '/calendar');
 }
 
 
