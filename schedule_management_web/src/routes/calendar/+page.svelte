@@ -246,15 +246,18 @@
 			{/if}
 			<div class="modal {isModalOpen ? 'active' : ''}" on:click={closeModal}>
 				<div class="modal-content">
-					<p>{selectedDate.toLocaleDateString()}</p>
+					<p>선택 날짜 {selectedDate.toISOString().slice(0, 10)}</p>
 					{#if filteredScheduleList.length > 0}
 					{#each filteredScheduleList as schedule (schedule.id)}
+					<p>일정 마감일 {schedule.end_date.slice(0,11)}</p>
+					<div class="scheduleList-item">
 					<p>{schedule.schedule_name}<p>
 					<form method="post">
-						<button type="button" on:click={() => editSchedule(schedule)}>수정</button>
+						<button type="button" on:click={() => editSchedule(schedule)}>일정 수정</button>
 						<input name="id" type="text" value={schedule.id} hidden />
-						<button type="submit" formaction="?/deleteSchedule">일정 삭제</button>
+						<button type="submit" onclick="alert('일정이 삭제되었습니다.')" formaction="?/deleteSchedule">일정 삭제</button>
 					</form>
+					</div>
 					{/each}
 				 	{/if}
 					<button on:click={addSchedule}>일정 추가</button>
@@ -282,7 +285,7 @@
 					<form method="post">
 						<button type="button" on:click={editGoal}>수정</button>
 						<input name="id" type="text" value={goal.id} hidden />
-						<button type="submit" onclick="alert('삭제되었습니다.')" formaction="?/deleteGoal"
+						<button type="submit" onclick="alert('목표가 삭제되었습니다.')" formaction="?/deleteGoal"
 							>삭제</button
 						>
 					</form>
@@ -437,8 +440,8 @@
 
 	.checklist-item button {
 		padding: 0; /* Adjust padding as needed */
-		font-size: 12px; /* Adjust font size as needed */
-		margin: 0 4px;
+		font-size: 14px; /* Adjust font size as needed */
+		margin: 0 5px;
 		border: 0;
 	}
 
@@ -508,5 +511,18 @@
 	.day.event {
 		background-color: #b3d7f0;
 		color: white;
+	}
+
+	.scheduleList-item{
+		display: flex;
+		align-items: center;
+		margin-bottom: 8px;
+		flex-wrap: wrap;
+	}
+	.scheduleList-item button {
+		padding: 0; /* Adjust padding as needed */
+		font-size: 18px; /* Adjust font size as needed */
+		margin: 0 5px;
+		border: 0;
 	}
 </style>
