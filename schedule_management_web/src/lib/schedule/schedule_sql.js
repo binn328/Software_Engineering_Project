@@ -42,6 +42,27 @@ export async function insertRecord(locals, formData) {
  * @param {App.Locals} locals
  * @param {*} formData
  */
+export async function insertCalendarRecord(locals, formData) {
+	const data = {
+		owner: locals.pb.authStore.model?.id,
+		start_date: formData.get('start_date'),
+		end_date: formData.get('end_date'),
+		location: formData.get('location'),
+		schedule_name: formData.get('schedule_name'),
+		importance_level: formData.get('importance_level'),
+		repeat: formData.get('repeat'),
+		bg_color: formData.get('bg_color')
+	};
+	const record = await locals.pb.collection('Schedule').create(data);
+
+	throw redirect(303, '/calendar');
+}
+
+/**
+ *
+ * @param {App.Locals} locals
+ * @param {*} formData
+ */
 export async function updateRecord(locals, formData) {
 	const id = formData.get('id');
 	const data = {
@@ -64,9 +85,44 @@ export async function updateRecord(locals, formData) {
  * @param {App.Locals} locals
  * @param {*} formData
  */
+export async function updateCalendarRecord(locals, formData) {
+	const id = formData.get('id');
+	const data = {
+		start_date: formData.get('start_date'),
+		end_date: formData.get('end_date'),
+		location: formData.get('location'),
+		schedule_name: formData.get('schedule_name'),
+		importance_level: formData.get('importance_level'),
+		repeat: formData.get('repeat'),
+		bg_color: formData.get('bg_color')
+	};
+
+	const record = await locals.pb.collection('Schedule').update(id, data);
+
+	throw redirect(303, '/schedule');
+}
+
+
+/**
+ *
+ * @param {App.Locals} locals
+ * @param {*} formData
+ */
 export async function deleteRecord(locals, formData) {
 	const id = formData.get('id');
 	const record = await locals.pb.collection('Schedule').delete(id);
 
 	throw redirect(303, '/schedule');
+}
+
+/**
+ *
+ * @param {App.Locals} locals
+ * @param {*} formData
+ */
+export async function deleteCalendarRecord(locals, formData) {
+	const id = formData.get('id');
+	const record = await locals.pb.collection('Schedule').delete(id);
+
+	throw redirect(303, '/calendar');
 }
