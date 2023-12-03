@@ -95,6 +95,7 @@
 </script>
 
 <div class="container">
+	<div class="container-background">
 	<h1>Todolist</h1>
 
 	<div class="details-container">
@@ -129,6 +130,7 @@
 	</div>
 
 	<div class="todo-container">
+		<div class="todolist">
 		{#each filteredTodoList as todo}
 			<form method="post" action="?/updateTodo">
 				<div class="task">
@@ -152,20 +154,28 @@
 		{#if is_show_addTodo}
 			<ComponentAddTodo {component_data} on:close={closeAddTodo} />
 		{/if}
+		</div>
+		
 
 		<div class="add-todo">
 			<button class="btn" on:click={showAddTodo}>+</button>
 		</div>
 	</div>
 </div>
+</div>
 
 <style>
+	.container-background{
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      padding-bottom: 10px;
+   }
 	input{
 		background:white;
-		opacity:0.7;
+		/*opacity:0.7;*/
 	}
 	.button{
-		background-color:rgb(79, 79, 197);
+		background-color: rgb(105, 105, 157);
 		border:none;
 	}
 	.category-window{
@@ -183,6 +193,10 @@
 	  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.2);
       width:300px;
 	}
+	.category-window ul{
+      padding: 0;
+      margin: 0;
+   }
 	.category-btns{
 		border:none;
 		background-color:transparent;
@@ -196,32 +210,40 @@
 		color:black;
 	}
 	.container{
-		border-radius:10px;
-		max-width: 800px;
-    	margin: 20px auto;
-    	font-family: 'Arial', sans-serif;
-    	transition: background-color 0.3s ease;
-    	background-color: white;
-    	padding: 30px;
-    	box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
-	}
+      border-radius:10px;
+      max-width: 800px;
+       /*margin: 20px auto;*/
+       font-family: 'Arial', sans-serif;
+       transition: background-color 0.3s ease;
+       background-color: #1f1f27;
+       padding: 30px;
+       box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
+      margin-top: -20px;
+   }
 	.showDate {
 		text-align: center;
 	}
 
 	h1 {
-		text-align: center;
-	}
+      text-align: center;
+      background-color: rgb(73, 73, 111);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 30px;
+      color: #f5f5f5;
+   }
 
-	.btn {
-		background-color: transparent;
-		color: black;
-		border-radius: 10px;
-		border-color: white;
-		color:white;
-		opacity:0.8;
-		
-	}
+   .btn {
+      background-color: transparent;
+      color: black;
+      border-radius: 10px;
+      border-color: rgb(21, 16, 16);
+      color:rgb(0, 0, 0);
+      opacity:0.8;
+      margin-top: 5px;
+      
+   }
+
 
 	.datelist {
 		color: black;
@@ -235,14 +257,21 @@
 	}
 
 	.todo-container {
-		border: 1px solid #ccc;
-		padding: 10px;
-		width: 80%;
-		margin: 20px auto;
-		background-color: rgb(56, 31, 95);
-		
-		border-radius:10px;
-	}
+      padding: 10px;
+      width: 80%;
+      margin: 20px auto;
+      border-radius:10px;
+   }
+
+   .todolist{
+      border: 1px solid gray;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: white;
+   }
+   .add-todo{
+      background-color: white;
+   }
 
 	p {
 		margin-top: 15px;

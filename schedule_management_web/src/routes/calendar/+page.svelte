@@ -304,6 +304,22 @@
 </div>
 
 <style>
+	.container {
+      display: flex;
+      background-color: #1f1f27;
+      padding: 10px;
+      margin-top: -30px;
+      border-radius: 8px;
+   }
+   body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+   }
 	.calendar-container {
 		max-width: 700px;
 		width: 100%;
@@ -312,7 +328,7 @@
 		border-radius: 8px;
 		overflow: hidden;
 		max-height: 800px;
-		margin: 20px auto 0; /* Center the calendar horizontally and add margin-top */
+		margin: 20px;
 	}
 
 	.month-navigation {
@@ -409,23 +425,58 @@
 		border-radius: 50%;
 	}
 
+	.add-event-button {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+   }
+
+   .add-event-button button {
+      background-color: rgb(107, 107, 161);
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+   }
+
+   .add-event-button button:hover {
+      background-color: rgb(73, 73, 111);
+   }
+
+   .add-checklist-item input{
+      color: f5f5f5;
+   }
+
 	.event {
 		background-color: var(--event-color, #b3d7f0);
 		color: white;
 	}
 
-	.checklist-container {
-		width: 300px; /* Adjust the width as needed */
-		margin-left: 20px;
-		max-height: 700px;
-		overflow-y: auto;
-	}
+	.calendar-container {
+      max-width: 700px;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 10px 10px 10px 10px rgb(0, 0, 0, 0.5);
+      border-radius: 8px;
+      overflow: hidden;
+      max-height: 800px;
+      /*margin: 20px auto 0; /* Center the calendar horizontally and add margin-top */
+      margin: 20px;
+   }
+
 
 	.checklist-container h2 {
-		color: rgb(73, 73, 111);
-		margin-bottom: 8px;
+		/*color: rgb(73, 73, 111);*/
+		color: #f5f5f5;
+		margin-bottom: 30px;
 		text-align: center;
 	}
+
+	.checklist-container button{
+      background-color: rgb(107, 107, 161);
+      border-color: rgb(107, 107, 161);
+   }
 
 	.checklist-item {
 		display: flex;
@@ -436,7 +487,12 @@
 
 	.checklist-item input {
 		margin-right: 8px;
+		color: white;
 	}
+
+	.checklist-item input:checked {
+       background-color: #1f1f27;
+    }
 
 	.checklist-item button {
 		padding: 0; /* Adjust padding as needed */
@@ -449,6 +505,7 @@
 		word-break: break-all;
 		display: flex;
 		align-items: center;
+		color: #f5f5f5;
 		/*flex-wrap: wrap;*/
 	}
 
@@ -462,19 +519,15 @@
 		align-items: center;
 	}
 
-	.container {
-		display: flex;
-	}
-
 	.checklist-container {
 		width: 300px;
 		margin-left: 20px;
 		max-height: 700px;
 		overflow-y: auto;
 		display: block; /* Set the default display value */
-		background-color: #f5f5f5;
+		/*background-color: #f5f5f5;*/
 		padding: 20px;
-		box-shadow: 10px 10px 10px 10px rgb(0, 0, 0, 0.5);
+		/*box-shadow: 10px 10px 10px 10px rgb(0, 0, 0, 0.5);*/
 	}
 
 	.day .event-indicator {

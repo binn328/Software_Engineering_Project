@@ -111,6 +111,7 @@
       background-color: white;
       padding: 30px;
       box-shadow: 10px 10px 10px 10px rgb(0,0,0, 0.5);
+      border-radius: 8px;
    }
  
    .add-schedule {
