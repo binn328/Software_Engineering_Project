@@ -62,6 +62,7 @@
    }
 
    nav {
+      top: -70px;
       padding: 10px; /* 원하는 여백 설정 */
       position: relative;
       z-index: 1; /* Ensure the navigation bar is above other elements */
