@@ -120,7 +120,10 @@
 
 	// 날짜 선택 함수
 	const selectDate = (date) => {
-		selectedDate = date; // 선택한 날짜 업데이트
+		const select_date = date;
+		const next_date = new Date(select_date);
+		next_date.setDate(select_date.getDate() + 1);
+		selectedDate = next_date; // 선택한 날짜 업데이트
 		calculateDaysDifference(); // 선택한 날짜와 현재 날짜의 차이 계산
 		isModalOpen = true; // 모달 창 열기
 
