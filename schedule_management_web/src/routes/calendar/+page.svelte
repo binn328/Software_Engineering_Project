@@ -7,6 +7,7 @@
 	let currentDate = new Date(); // 현재 날짜
 	let todayDate = new Date(); // 오늘 날짜
 	let selectedDate = new Date(); // 선택한 날짜
+	let selectedDatePlus = new Date();
 	let isModalOpen = false; // 모달 창 열림 여부
 	let daysInMonth = []; // 월의 날짜 배열
 	let daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // 요일 배열
@@ -120,10 +121,11 @@
 
 	// 날짜 선택 함수
 	const selectDate = (date) => {
+		selectedDate = date; // 선택한 날짜 업데이트
 		const select_date = date;
 		const next_date = new Date(select_date);
 		next_date.setDate(select_date.getDate() + 1);
-		selectedDate = next_date; // 선택한 날짜 업데이트
+		selectedDatePlus = next_date;
 		calculateDaysDifference(); // 선택한 날짜와 현재 날짜의 차이 계산
 		isModalOpen = true; // 모달 창 열기
 
@@ -249,7 +251,7 @@
 			{/if}
 			<div class="modal {isModalOpen ? 'active' : ''}" on:click={closeModal}>
 				<div class="modal-content">
-					<p>선택 날짜 {selectedDate.toISOString().slice(0, 10)}</p>
+					<p>선택 날짜 {selectedDatePlus.toISOString().slice(0, 10)}</p>
 					{#if filteredScheduleList.length > 0}
 					{#each filteredScheduleList as schedule (schedule.id)}
 					<p>일정 마감일 {schedule.end_date.slice(0,11)}</p>
